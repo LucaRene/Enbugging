@@ -1,14 +1,18 @@
-package org.example.Tasks;
+package Task;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class Task {
 
-    String expectedErrorMessage;
-    String taskCode;
+    private String expectedErrorMessage;
+    private String taskCode;
 
-    public Task(String taskCode) {
-        this.taskCode = taskCode;
+    private List<String> usedVariableNames;
+
+    public Task() {
+        this.usedVariableNames = new ArrayList<>();
     }
 
     public String getNewTask() {
