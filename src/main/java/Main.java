@@ -3,7 +3,7 @@ import Task.Task;
 public class Main {
 
     public static void main(String[] args) {
-        Task task = new Task();
-        System.out.println(task.getNewTask());
+        Task t = TaskFactory.createTask("Task");
+        System.out.println(t.getTaskCode());
     }
 }

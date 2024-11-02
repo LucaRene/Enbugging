@@ -13,11 +13,7 @@ public class Task {
 
     public Task() {
         this.usedVariableNames = new ArrayList<>();
-    }
-
-    public String getNewTask() {
         taskCode = createClassDeclaration() + "\n" + createVariable() + "\n" + createMethod() + "\n}";
-        return taskCode;
     }
 
     public String createClassDeclaration() {
@@ -55,5 +51,9 @@ public class Task {
 
     public String createMethod() {
         return "\tpublic void methodName() {\n\n\t}";
+    }
+
+    public String getTaskCode() {
+        return taskCode;
     }
 }
