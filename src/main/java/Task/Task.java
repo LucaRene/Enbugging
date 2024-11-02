@@ -1,59 +1,79 @@
 package Task;
 
+import Context.ContextStrategy;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class Task {
 
+    private StringBuilder taskCode;
+    private final ContextStrategy context;
+    private final List<String> generatedAttributes;
+
     private String expectedErrorMessage;
-    private String taskCode;
 
-    private List<String> usedVariableNames;
+    public Task(ContextStrategy context) {
+        this.context = context;
+        this.taskCode = new StringBuilder();
+        this.generatedAttributes = new ArrayList<>();
 
-    public Task() {
-        this.usedVariableNames = new ArrayList<>();
-        taskCode = createClassDeclaration() + "\n" + createVariable() + "\n" + createMethod() + "\n}";
+        createClassDeclaration();
+        createVariable();
+        createVariable();
+        createMethod();
+        closeClass();
     }
 
-    public String createClassDeclaration() {
-        return "public class " + getRandomClassName() + " {";
+    public void createClassDeclaration() {
+        taskCode.append("public class ").append(context.getClassName()).append(" {").append("\n");
     }
 
-    private String getRandomClassName() {
-        String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        StringBuilder className = new StringBuilder();
-        Random random = new Random();
-        int length = 5;
+    public void createVariable() {
+        String attribute = context.getRandomAttribute();
+        Object value = context.getRandomValueForAttribute(attribute);
 
-        for (int i = 0; i < length; i++) {
-            className.append(alphabet.charAt(random.nextInt(alphabet.length())));
+        while (generatedAttributes.contains(attribute)) {
+            attribute = context.getRandomAttribute();
+            value = context.getRandomValueForAttribute(attribute);
         }
 
-        return className.toString();
+        String variableDeclaration = "\t" + getJavaType(value) + " " + attribute + " = " + formatValue(value) + ";";
+        taskCode.append(variableDeclaration).append("\n");
+        generatedAttributes.add(attribute);
     }
 
-    public String createVariable() {
-        return "\tint " + getRandomVariableName() + " = 0;";
-    }
+    public void createMethod() {
+        if (generatedAttributes.isEmpty()) {
+            return;
+        }
 
-    private String getRandomVariableName() {
-        String[] attributes = {
-                "groesse", "gewicht", "alter", "breite", "hoehe", "tiefe", "geschwindigkeit", "temperatur",
-                "druck", "laenge", "volumen", "kapazitaet", "leistung", "energie", "zeit", "frequenz", "spannung",
-                "strom", "widerstand", "kraft", "drehmoment", "beschleunigung", "impuls", "arbeit", "punktestand",
-                "einkommen", "kinderzahl", "haustier", "anzahlBaeume", "anzahlAutos", "anzahlZimmer", "anzahlStockwerke",
-                "anzahlFenster", "anzahlTueren", "anzahlSchueler", "anzahlMitarbeiter", "anzahlBesucher", "anzahlTeilnehmer"
-        };
         Random random = new Random();
-        return attributes[random.nextInt(attributes.length)];
+        String attribute = generatedAttributes.get(random.nextInt(generatedAttributes.size()));
+        String method = context.getRandomMethodForAttribute(attribute);
+
+        String methodDeclaration = "\tpublic void " + method + "() {\n\t\t// Logik für " + attribute + "\n\t}";
+        taskCode.append(methodDeclaration).append("\n");
     }
 
-    public String createMethod() {
-        return "\tpublic void methodName() {\n\n\t}";
+    public void closeClass() {
+        taskCode.append("}");
+    }
+
+    private String getJavaType(Object value) {
+        if (value instanceof Integer) return "int";
+        if (value instanceof Double) return "double";
+        if (value instanceof String) return "String";
+        return "Object";
+    }
+
+    private String formatValue(Object value) {
+        if (value instanceof String) return "\"" + value + "\"";
+        return value.toString();
     }
 
     public String getTaskCode() {
-        return taskCode;
+        return taskCode.toString();
     }
 }
