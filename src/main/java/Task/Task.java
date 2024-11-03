@@ -22,12 +22,13 @@ public class Task {
         createClassDeclaration();
         createVariable();
         createVariable();
-        createMethod();
+        createGetter();
+        createSetter();
         closeClass();
     }
 
     public void createClassDeclaration() {
-        taskCode.append("public class ").append(context.getClassName()).append(" {").append("\n");
+        taskCode.append("\n").append("public class ").append(context.getClassName()).append(" {").append("\n\n");
     }
 
     public void createVariable() {
@@ -44,21 +45,30 @@ public class Task {
         generatedAttributes.add(attribute);
     }
 
-    public void createMethod() {
+    public void createGetter() {
         if (generatedAttributes.isEmpty()) {
             return;
         }
 
         Random random = new Random();
         String attribute = generatedAttributes.get(random.nextInt(generatedAttributes.size()));
-        String method = context.getRandomMethodForAttribute(attribute);
+        String getter = "\n\t"+ "public " + getJavaType(context.getRandomValueForAttribute(attribute)) + " get" + attribute.substring(0, 1).toUpperCase() + attribute.substring(1) + "() {\n\t\treturn " + attribute + ";\n\t}";
+        taskCode.append(getter).append("\n");
+    }
 
-        String methodDeclaration = "\tpublic void " + method + "() {\n\t\t// Logik für " + attribute + "\n\t}";
-        taskCode.append(methodDeclaration).append("\n");
+    public void createSetter() {
+        if (generatedAttributes.isEmpty()) {
+            return;
+        }
+
+        Random random = new Random();
+        String attribute = generatedAttributes.get(random.nextInt(generatedAttributes.size()));
+        String setter = "\n\t"+ "public void aendere" + attribute.substring(0, 1).toUpperCase() + attribute.substring(1) + "(" + getJavaType(context.getRandomValueForAttribute(attribute)) + " " + attribute + ") {\n\t\tthis." + attribute + " = " + attribute + ";\n\t}";
+        taskCode.append(setter).append("\n");
     }
 
     public void closeClass() {
-        taskCode.append("}");
+        taskCode.append("}\n");
     }
 
     private String getJavaType(Object value) {
