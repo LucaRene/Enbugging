@@ -8,7 +8,7 @@ import java.util.Random;
 
 public class Task {
 
-    private StringBuilder taskCode;
+    private final StringBuilder taskCode;
     private final ContextStrategy context;
     private final List<String> generatedAttributes;
 
@@ -52,7 +52,7 @@ public class Task {
 
         Random random = new Random();
         String attribute = generatedAttributes.get(random.nextInt(generatedAttributes.size()));
-        String getter = "\n\t"+ "public " + getJavaType(context.getRandomValueForAttribute(attribute)) + " get" + attribute.substring(0, 1).toUpperCase() + attribute.substring(1) + "() {\n\t\treturn " + attribute + ";\n\t}";
+        String getter = "\n\tpublic " + getJavaType(context.getRandomValueForAttribute(attribute)) + " get" + capitalize(attribute) + "() {\n\t\treturn " + attribute + ";\n\t}";
         taskCode.append(getter).append("\n");
     }
 
@@ -63,7 +63,7 @@ public class Task {
 
         Random random = new Random();
         String attribute = generatedAttributes.get(random.nextInt(generatedAttributes.size()));
-        String setter = "\n\t"+ "public void aendere" + attribute.substring(0, 1).toUpperCase() + attribute.substring(1) + "(" + getJavaType(context.getRandomValueForAttribute(attribute)) + " " + attribute + ") {\n\t\tthis." + attribute + " = " + attribute + ";\n\t}";
+        String setter = "\n\tpublic void set" + capitalize(attribute) + "(" + getJavaType(context.getRandomValueForAttribute(attribute)) + " " + attribute + ") {\n\t\tthis." + attribute + " = " + attribute + ";\n\t}";
         taskCode.append(setter).append("\n");
     }
 
@@ -81,6 +81,13 @@ public class Task {
     private String formatValue(Object value) {
         if (value instanceof String) return "\"" + value + "\"";
         return value.toString();
+    }
+
+    private String capitalize(String str) {
+        if (str == null || str.isEmpty()) {
+            return str;
+        }
+        return str.substring(0, 1).toUpperCase() + str.substring(1);
     }
 
     public String getTaskCode() {
