@@ -71,19 +71,19 @@ public class Task {
         taskCode.append("}\n");
     }
 
-    private String getJavaType(Object value) {
+    public String getJavaType(Object value) {
         if (value instanceof Integer) return "int";
         if (value instanceof Double) return "double";
         if (value instanceof String) return "String";
         return "Object";
     }
 
-    private String formatValue(Object value) {
+    public String formatValue(Object value) {
         if (value instanceof String) return "\"" + value + "\"";
         return value.toString();
     }
 
-    private String capitalize(String str) {
+    public String capitalize(String str) {
         if (str == null || str.isEmpty()) {
             return str;
         }
@@ -92,5 +92,9 @@ public class Task {
 
     public String getTaskCode() {
         return taskCode.toString();
+    }
+
+    public List<String> getGeneratedAttributes() {
+        return new ArrayList<>(generatedAttributes);
     }
 }
