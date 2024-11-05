@@ -2,19 +2,18 @@ package Context;
 
 import java.util.Arrays;
 
+/**
+ * Concrete context class for representing a person. This class provides specific
+ * attributes, methods, and values relevant to a person, such as name, age, gender,
+ * nationality, and more.
+ */
 public class PersonContext extends ContextStrategy {
 
+    /**
+     * Constructs a new PersonContext and initializes the attribute-method and
+     * attribute-value mappings with person-specific information.
+     */
     public PersonContext() {
-        attributeMethodMap.put("name", new String[]{"aendereName", "zeigeName"});
-        attributeMethodMap.put("alter", new String[]{"aendereAlter", "zeigeAlter"});
-        attributeMethodMap.put("geschlecht", new String[]{"zeigeGeschlecht"});
-        attributeMethodMap.put("nationalitaet", new String[]{"zeigeNationalitaet"});
-        attributeMethodMap.put("gewicht", new String[]{"aendereGewicht", "zeigeGewicht"});
-        attributeMethodMap.put("groesse", new String[]{"aendereGroesse", "zeigeGroesse"});
-        attributeMethodMap.put("beruf", new String[]{"aendereBeruf", "zeigeBeruf"});
-        attributeMethodMap.put("einkommen", new String[]{"aendereEinkommen", "zeigeEinkommen"});
-        attributeMethodMap.put("wohnort", new String[]{"aendereWohnort", "zeigeWohnort"});
-
         attributeValueMap.put("name", Arrays.asList("Max", "Anna", "Paul", "Marie", "Lukas"));
         attributeValueMap.put("alter", Arrays.asList(20, 25, 30, 35, 40));
         attributeValueMap.put("geschlecht", Arrays.asList("männlich", "weiblich", "divers"));
@@ -26,6 +25,11 @@ public class PersonContext extends ContextStrategy {
         attributeValueMap.put("wohnort", Arrays.asList("Berlin", "München", "Hamburg", "Köln", "Frankfurt"));
     }
 
+    /**
+     * Returns the name of the class represented by this context.
+     *
+     * @return the class name, "Person"
+     */
     @Override
     public String getClassName() {
         return "Person";

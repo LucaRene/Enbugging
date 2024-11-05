@@ -3,25 +3,18 @@ package Context;
 import java.util.Arrays;
 import java.util.HashMap;
 
+/**
+ * Concrete context class representing a player character in a game. This class
+ * defines specific attributes, methods, and values relevant to a character,
+ * including health, damage, armor, speed, level, mana, and more.
+ */
 public class PlayerContext extends ContextStrategy {
 
+    /**
+     * Constructs a new PlayerContext and initializes the attribute-method and
+     * attribute-value mappings with game-specific character data.
+     */
     public PlayerContext() {
-        attributeMethodMap = new HashMap<>();
-        attributeMethodMap.put("leben", new String[]{"heilen", "erleideSchaden"});
-        attributeMethodMap.put("schaden", new String[]{"erhoeheSchaden", "reduziereSchaden"});
-        attributeMethodMap.put("ruestung", new String[]{"erhoeheRuestung", "reduziereRuestung"});
-        attributeMethodMap.put("geschwindigkeit", new String[]{"erhoeheGeschwindigkeit", "reduziereGeschwindigkeit"});
-        attributeMethodMap.put("level", new String[]{"levelUp"});
-        attributeMethodMap.put("mana", new String[]{"regeneriereMana", "verbraucheMana"});
-        attributeMethodMap.put("ausdauer", new String[]{"erhoeheAusdauer", "reduziereAusdauer"});
-        attributeMethodMap.put("intelligenz", new String[]{"erhoeheIntelligenz", "reduziereIntelligenz"});
-        attributeMethodMap.put("staerke", new String[]{"erhoeheStaerke", "reduziereStaerke"});
-        attributeMethodMap.put("beweglichkeit", new String[]{"erhoeheBeweglichkeit", "reduziereBeweglichkeit"});
-        attributeMethodMap.put("charaktername", new String[]{"zeigeName", "aendereName"});
-        attributeMethodMap.put("klasse", new String[]{"zeigeKlasse", "aendereKlasse"});
-        attributeMethodMap.put("waffenart", new String[]{"zeigeWaffenart", "aendereWaffenart"});
-        attributeMethodMap.put("rasse", new String[]{"zeigeRasse", "aendereRasse"});
-
         attributeValueMap = new HashMap<>();
         attributeValueMap.put("leben", Arrays.asList(100, 150, 200, 250, 300, 350, 400, 450));
         attributeValueMap.put("schaden", Arrays.asList(10, 20, 30, 40, 50, 60, 70, 80));
@@ -39,6 +32,11 @@ public class PlayerContext extends ContextStrategy {
         attributeValueMap.put("rasse", Arrays.asList("Mensch", "Elf", "Zwerg", "Hobbit", "Ork", "Troll", "Goblin", "Dämon"));
     }
 
+    /**
+     * Returns the name of the class represented by this context.
+     *
+     * @return the class name, "Spielfigur"
+     */
     @Override
     public String getClassName() {
         return "Spielfigur";

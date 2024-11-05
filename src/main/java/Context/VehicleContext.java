@@ -3,24 +3,18 @@ package Context;
 import java.util.Arrays;
 import java.util.HashMap;
 
-
+/**
+ * Concrete context class representing a vehicle. This class provides specific
+ * attributes and values relevant to a vehicle, including speed, fuel level, mileage,
+ * brand, model, and more.
+ */
 public class VehicleContext extends ContextStrategy {
 
+    /**
+     * Constructs a new VehicleContext and initializes the attribute-value
+     * mappings with vehicle-specific data.
+     */
     public VehicleContext() {
-        // Attribut-Methoden-Verknüpfung
-        attributeMethodMap = new HashMap<>();
-        attributeMethodMap.put("geschwindigkeit", new String[]{"beschleunige", "bremse"});
-        attributeMethodMap.put("tankfuellstand", new String[]{"tankeAuf", "verbraucheKraftstoff"});
-        attributeMethodMap.put("kilometerstand", new String[]{"erhoeheKilometerstand"});
-        attributeMethodMap.put("marke", new String[]{"zeigeMarke", "aendereMarke"});
-        attributeMethodMap.put("modell", new String[]{"zeigeModell", "aendereModell"});
-        attributeMethodMap.put("typ", new String[]{"zeigeTyp", "aendereTyp"});
-        attributeMethodMap.put("baujahr", new String[]{"zeigeBaujahr", "aendereBaujahr"});
-        attributeMethodMap.put("farbe", new String[]{"zeigeFarbe", "aendereFarbe"});
-        attributeMethodMap.put("sitzplaetze", new String[]{"zeigeSitzplaetze", "aendereSitzplaetze"});
-        attributeMethodMap.put("kennzeichen", new String[]{"zeigeKennzeichen", "aendereKennzeichen"});
-
-        // Attribut-Wert-Verknüpfung
         attributeValueMap = new HashMap<>();
         attributeValueMap.put("geschwindigkeit", Arrays.asList(0, 50, 100, 150, 200, 250, 300));
         attributeValueMap.put("tankfuellstand", Arrays.asList(0, 25, 50, 75, 100));
@@ -34,6 +28,11 @@ public class VehicleContext extends ContextStrategy {
         attributeValueMap.put("kennzeichen", Arrays.asList("M-AB1234", "B-CD5678", "HH-EF9012", "F-GH3456", "S-IJ7890"));
     }
 
+    /**
+     * Returns the name of the class represented by this context.
+     *
+     * @return the class name, "Fahrzeug"
+     */
     @Override
     public String getClassName() {
         return "Fahrzeug";
