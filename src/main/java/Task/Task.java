@@ -148,6 +148,15 @@ public class Task {
     }
 
     /**
+     * Returns the name of the generated class.
+     *
+     * @return the name of the generated class
+     */
+    public String getClassName() {
+        return context.getClassName();
+    }
+
+    /**
      * Retrieves a list of all generated attributes for this class.
      *
      * @return a list of generated attribute names
