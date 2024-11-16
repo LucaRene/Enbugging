@@ -16,7 +16,7 @@ public class CodeCompiler {
      */
     public List<String> compile(String className, String code) {
 
-        File sourceFile = new File(className + ".java");
+        File sourceFile = new File("src/main/resources/temp/" + className + ".java");
         try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(sourceFile), StandardCharsets.UTF_8))) {
             writer.write(code);
         } catch (IOException e) {
@@ -38,9 +38,8 @@ public class CodeCompiler {
         List<String> errors = new ArrayList<>();
         if (!success) {
             for (Diagnostic<? extends JavaFileObject> diagnostic : diagnostics.getDiagnostics()) {
-                errors.add(String.format("Error on line %d in %s: %s",
+                errors.add(String.format("Error on line %d: %s",
                         diagnostic.getLineNumber(),
-                        diagnostic.getSource().getName(),
                         diagnostic.getMessage(null)));
             }
         }
@@ -49,6 +48,11 @@ public class CodeCompiler {
             fileManager.close();
             if (!sourceFile.delete()) {
                 errors.add("Warning: Failed to delete temporary source file.");
+            }
+
+            File classFile = new File("src/main/resources/temp/" + className + ".class");
+            if (classFile.exists() && !classFile.delete()) {
+                errors.add("Warning: Failed to delete compiled .class file.");
             }
         } catch (IOException e) {
             errors.add("Failed to close file manager: " + e.getMessage());
