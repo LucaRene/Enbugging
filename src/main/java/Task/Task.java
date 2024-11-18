@@ -5,8 +5,6 @@ import Context.ContextStrategy;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * The Task class generates a random, syntactically correct Java class code snippet.
@@ -149,8 +147,17 @@ public abstract class Task {
      *
      * @return the generated class code
      */
-    public String getTaskCode() {
+    public String getTaskCodeWithGaps() {
         return taskCodeWithGaps.toString();
+    }
+
+    /**
+     * Returns the name of the generated class.
+     *
+     * @return the name of the generated class
+     */
+    public String getTaskCodeWithoutGaps() {
+        return taskCodeWithoutGaps.toString();
     }
 
     /**
