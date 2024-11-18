@@ -5,6 +5,8 @@ import Context.ContextStrategy;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * The Task class generates a random, syntactically correct Java class code snippet.
@@ -12,10 +14,11 @@ import java.util.Random;
  */
 public class Task {
 
-    private final StringBuilder taskCode;
-    private final ContextStrategy context;
-    private final List<String> generatedAttributes;
-    //private String expectedErrorMessage;
+    protected final StringBuilder taskCodeWithoutGaps;
+    protected final StringBuilder taskCodeWithGaps;
+    protected final ContextStrategy context;
+    protected final List<String> generatedAttributes;
+    protected String expectedErrorMessage;
 
     /**
      * Constructs a new Task with the specified context, generating a random class
@@ -25,7 +28,8 @@ public class Task {
      */
     public Task(ContextStrategy context) {
         this.context = context;
-        this.taskCode = new StringBuilder();
+        this.taskCodeWithoutGaps = new StringBuilder();
+        this.taskCodeWithGaps = new StringBuilder();
         this.generatedAttributes = new ArrayList<>();
 
         createClassDeclaration();
@@ -40,7 +44,7 @@ public class Task {
      * Generates the class declaration based on the context class name.
      */
     public void createClassDeclaration() {
-        taskCode.append("\n").append("public class ").append(context.getClassName()).append(" {").append("\n\n");
+        taskCodeWithoutGaps.append("public class ").append(context.getClassName()).append(" {").append("\n\n");
     }
 
     /**
@@ -57,7 +61,7 @@ public class Task {
         }
 
         String variableDeclaration = "\t" + getJavaType(value) + " " + attribute + " = " + formatValue(value) + ";";
-        taskCode.append(variableDeclaration).append("\n");
+        taskCodeWithoutGaps.append(variableDeclaration).append("\n");
         generatedAttributes.add(attribute);
     }
 
@@ -74,7 +78,7 @@ public class Task {
         String attribute = generatedAttributes.get(random.nextInt(generatedAttributes.size()));
         String getter = "\n\tpublic " + getJavaType(context.getRandomValueForAttribute(attribute)) +
                 " get" + capitalize(attribute) + "() {\n\t\treturn " + attribute + ";\n\t}";
-        taskCode.append(getter).append("\n");
+        taskCodeWithoutGaps.append(getter).append("\n");
     }
 
     /**
@@ -91,14 +95,14 @@ public class Task {
         String setter = "\n\tpublic void set" + capitalize(attribute) +
                 "(" + getJavaType(context.getRandomValueForAttribute(attribute)) + " " + attribute +
                 ") {\n\t\tthis." + attribute + " = " + attribute + ";\n\t}";
-        taskCode.append(setter).append("\n");
+        taskCodeWithoutGaps.append(setter).append("\n");
     }
 
     /**
      * Closes the generated class code with a closing brace.
      */
     public void closeClass() {
-        taskCode.append("}\n");
+        taskCodeWithoutGaps.append("}\n");
     }
 
     /**
@@ -144,7 +148,7 @@ public class Task {
      * @return the generated class code
      */
     public String getTaskCode() {
-        return taskCode.toString();
+        return taskCodeWithGaps.toString();
     }
 
     /**
@@ -163,5 +167,14 @@ public class Task {
      */
     public List<String> getGeneratedAttributes() {
         return new ArrayList<>(generatedAttributes);
+    }
+
+    /**
+     * Retrieves the expected error message for this task.
+     *
+     * @return the expected error message
+     */
+    public String getExpectedErrorMessage() {
+        return expectedErrorMessage;
     }
 }

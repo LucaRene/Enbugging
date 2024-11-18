@@ -1,17 +1,19 @@
 import Task.Task;
 import Compiler.CodeCompiler;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Main {
 
     public static void main(String[] args) {
-        Task t = TaskFactory.createTask("Task");
+        Task t = TaskFactory.createTask("SemicolonErrorTask");
+
+        System.out.println();
+        System.out.println("Verändere den Code so, dass der folgende Fehler erzeugt wird:");
+        System.out.println(t.getExpectedErrorMessage());
+        System.out.println();
         System.out.println(t.getTaskCode());
 
-        CodeCompiler compiler = new CodeCompiler();
-        List<String> errors =  compiler.compile(t.getClassName(), t.getTaskCode());
+        /* CodeCompiler compiler = new CodeCompiler();
+        List<String> errors = compiler.compile(t.getClassName(), t.getTaskCode());
 
         if (errors.isEmpty()) {
             System.out.println("Compilation successful!");
@@ -21,5 +23,6 @@ public class Main {
                 System.out.println(error);
             }
         }
+         */
     }
 }

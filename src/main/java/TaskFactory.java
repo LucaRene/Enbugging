@@ -2,7 +2,8 @@ import Context.ContextStrategy;
 import Context.PersonContext;
 import Context.PlayerContext;
 import Context.VehicleContext;
-import Task.Task;
+
+import Task.*;
 
 import java.util.Arrays;
 import java.util.List;
@@ -29,7 +30,14 @@ public class TaskFactory {
      * @return A new Task instance with a randomly selected context.
      */
     public static Task createTask(String taskType) {
+
         ContextStrategy context = CONTEXTS.get(RANDOM.nextInt(CONTEXTS.size()));
-        return new Task(context);
+
+        switch (taskType) {
+            case "SemicolonErrorTask":
+                return new SemicolonErrorTask(context);
+            default:
+                return new Task(context);
+        }
     }
 }
