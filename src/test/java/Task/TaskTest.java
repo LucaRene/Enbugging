@@ -24,7 +24,7 @@ public class TaskTest {
     @BeforeEach
     public void setUp() {
         context = new VehicleContext();
-        task = new Task(context);
+        task = new SemicolonErrorTask(context);
     }
 
     /**
@@ -57,7 +57,7 @@ public class TaskTest {
     @Test
     public void testUniqueAttributesForVariables() {
         for (int i = 0; i < 10; i++) {
-            task = new Task(context);
+            task = new SemicolonErrorTask(context);
             List<String> attributes = task.getGeneratedAttributes();
             task.createVariable();
             task.createVariable();

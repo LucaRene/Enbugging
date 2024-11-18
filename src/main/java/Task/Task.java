@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
  * The Task class generates a random, syntactically correct Java class code snippet.
  * It utilizes a specified context to generate attributes and methods for the class.
  */
-public class Task {
+public abstract class Task {
 
     protected final StringBuilder taskCodeWithoutGaps;
     protected final StringBuilder taskCodeWithGaps;
@@ -104,6 +104,8 @@ public class Task {
     public void closeClass() {
         taskCodeWithoutGaps.append("}\n");
     }
+
+    protected abstract void createGapsInCode();
 
     /**
      * Determines the Java data type of the provided value.

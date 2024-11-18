@@ -26,7 +26,7 @@ public class SemicolonErrorTask extends Task {
     /**
      * Creates gaps in the generated code by replacing selected keywords or symbols with gaps.
      */
-    private void createGapsInCode() {
+    protected void createGapsInCode() {
         Random random = new Random();
         StringBuilder code = new StringBuilder(taskCodeWithoutGaps);
         List<String> words = new ArrayList<>(Arrays.stream(code.toString().split("(?<=;)|(?=;)|(?<=\\()|(?=\\()|(?<=\\))|(?=\\))|\\s+"))
@@ -70,7 +70,6 @@ public class SemicolonErrorTask extends Task {
             code.replace(position, position + 1, "[;]");
         }
     }
-
 
     /**
      * Finds all occurrences of a substring within a string.

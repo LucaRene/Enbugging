@@ -37,7 +37,7 @@ public class TaskFactory {
             case "SemicolonErrorTask":
                 return new SemicolonErrorTask(context);
             default:
-                return new Task(context);
+                return null;
         }
     }
 }
