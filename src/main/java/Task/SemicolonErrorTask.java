@@ -35,8 +35,6 @@ public class SemicolonErrorTask extends Task {
 
         createSemicolonGap(code, random);
 
-        int position;
-        List<Integer> positions;
         for (int i = 0; i < 4; i++) {
 
             int index = random.nextInt(words.size());
@@ -47,13 +45,14 @@ public class SemicolonErrorTask extends Task {
                 gap = words.get(index);
             }
 
-            positions = findAllOccurrences(code.toString(), gap);
-            position = positions.get(random.nextInt(positions.size()));
+            List<Integer> positions = findAllOccurrencesOfWords(code.toString(), gap);
+            int position = positions.get(random.nextInt(positions.size()));
             code.replace(position, position + gap.length(), "[" + gap + "]");
 
             words.remove(index);
         }
 
+        taskCodeWithGaps.setLength(0);
         taskCodeWithGaps.append(code);
     }
 
@@ -64,27 +63,10 @@ public class SemicolonErrorTask extends Task {
      * @param random the random number generator
      */
     private void createSemicolonGap(StringBuilder code, Random random) {
-        List<Integer> positions = findAllOccurrences(code.toString(), ";");
+        List<Integer> positions = findAllOccurrencesOfWords(code.toString(), ";");
         if (!positions.isEmpty()) {
             int position = positions.get(random.nextInt(positions.size()));
             code.replace(position, position + 1, "[;]");
         }
-    }
-
-    /**
-     * Finds all occurrences of a substring within a string.
-     *
-     * @param text the text to search for the substring
-     * @param sub  the substring to find within the text
-     * @return a list of positions where the substring occurs in the text
-     */
-    private List<Integer> findAllOccurrences(String text, String sub) {
-        List<Integer> positions = new ArrayList<>();
-        int index = text.indexOf(sub);
-        while (index >= 0) {
-            positions.add(index);
-            index = text.indexOf(sub, index + sub.length());
-        }
-        return positions;
     }
 }

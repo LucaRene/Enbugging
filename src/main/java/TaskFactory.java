@@ -36,6 +36,8 @@ public class TaskFactory {
         switch (taskType) {
             case "SemicolonErrorTask":
                 return new SemicolonErrorTask(context);
+            case "UnclosedStringErrorTask":
+                return new UnclosedStringErrorTask(context);
             default:
                 return null;
         }

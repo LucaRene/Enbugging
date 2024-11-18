@@ -29,7 +29,10 @@ public abstract class Task {
         this.taskCodeWithoutGaps = new StringBuilder();
         this.taskCodeWithGaps = new StringBuilder();
         this.generatedAttributes = new ArrayList<>();
+        generateTaskCode();
+    }
 
+    public void generateTaskCode(){
         createClassDeclaration();
         createVariable();
         createVariable();
@@ -140,6 +143,23 @@ public abstract class Task {
             return str;
         }
         return str.substring(0, 1).toUpperCase() + str.substring(1);
+    }
+
+    /**
+     * Finds all occurrences of a substring within a string.
+     *
+     * @param text the text to search for the substring
+     * @param sub  the substring to find within the text
+     * @return a list of positions where the substring occurs in the text
+     */
+    protected List<Integer> findAllOccurrencesOfWords(String text, String sub) {
+        List<Integer> positions = new ArrayList<>();
+        int index = text.indexOf(sub);
+        while (index >= 0) {
+            positions.add(index);
+            index = text.indexOf(sub, index + sub.length());
+        }
+        return positions;
     }
 
     /**

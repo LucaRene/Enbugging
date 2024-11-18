@@ -1,9 +1,22 @@
 import Task.Task;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 public class Main {
 
     public static void main(String[] args) {
-        Task t = TaskFactory.createTask("SemicolonErrorTask");
+        Random random = new Random();
+
+        List<String> possibleErrors= new ArrayList<String>();
+        possibleErrors.add("SemicolonErrorTask");
+        possibleErrors.add("UnclosedStringErrorTask");
+
+
+        //Task t = TaskFactory.createTask(possibleErrors.get(random.nextInt(possibleErrors.size())));
+        //Task t = TaskFactory.createTask("SemicolonErrorTask");
+        Task t = TaskFactory.createTask("UnclosedStringErrorTask");
 
         System.out.println();
         System.out.println("Verändere den Code so, dass der folgende Fehler erzeugt wird:");
