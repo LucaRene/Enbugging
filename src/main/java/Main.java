@@ -14,9 +14,9 @@ public class Main {
         possibleErrors.add("UnclosedStringErrorTask");
 
 
-        //Task t = TaskFactory.createTask(possibleErrors.get(random.nextInt(possibleErrors.size())));
+        Task t = TaskFactory.createTask(possibleErrors.get(random.nextInt(possibleErrors.size())));
         //Task t = TaskFactory.createTask("SemicolonErrorTask");
-        Task t = TaskFactory.createTask("UnclosedStringErrorTask");
+        //Task t = TaskFactory.createTask("UnclosedStringErrorTask");
 
         System.out.println();
         System.out.println("Verändere den Code so, dass der folgende Fehler erzeugt wird:");
