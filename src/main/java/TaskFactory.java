@@ -38,6 +38,8 @@ public class TaskFactory {
                 return new SemicolonErrorTask(context);
             case "UnclosedStringErrorTask":
                 return new UnclosedStringErrorTask(context);
+            case "ReachedEndOfFileErrorTask":
+                return new ReachedEndOfFileErrorTask(context);
             default:
                 return null;
         }

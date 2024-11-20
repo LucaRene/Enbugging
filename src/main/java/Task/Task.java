@@ -3,6 +3,7 @@ package Task;
 import Context.ContextStrategy;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -103,10 +104,49 @@ public abstract class Task {
      * Closes the generated class code with a closing brace.
      */
     public void closeClass() {
-        taskCodeWithoutGaps.append("}\n");
+        taskCodeWithoutGaps.append("}");
     }
 
-    protected abstract void createGapsInCode();
+    /**
+     * Creates gaps in the generated code by replacing selected keywords or symbols with gaps.
+     */
+    protected void createGapsInCode() {
+        Random random = new Random();
+        StringBuilder code = new StringBuilder(taskCodeWithoutGaps);
+        List<String> words = new ArrayList<>(Arrays.stream(code.toString().split("(?<=;)|(?=;)|(?<=\\()|(?=\\()|(?<=\\))|(?=\\))|\\s+"))
+                .filter(word -> !word.isEmpty())
+                .toList());
+
+        createSolutionGap(code, random);
+
+        for (int i = 0; i < 4; i++) {
+
+            int index = random.nextInt(words.size());
+            String gap = words.get(index);
+
+            while (gap.isEmpty() || gap.isBlank()) {
+                index = random.nextInt(words.size());
+                gap = words.get(index);
+            }
+
+            List<Integer> positions = findAllOccurrencesOfWords(code.toString(), gap);
+            int position = positions.get(random.nextInt(positions.size()));
+            code.replace(position, position + gap.length(), "[" + gap + "]");
+
+            words.remove(index);
+        }
+
+        taskCodeWithGaps.setLength(0);
+        taskCodeWithGaps.append(code);
+    }
+
+    /**
+     * Creates a gap in the code by replacing a semicolon with a gap.
+     *
+     * @param code   the code snippet to modify
+     * @param random the random number generator
+     */
+    protected abstract void createSolutionGap(StringBuilder code, Random random);
 
     /**
      * Determines the Java data type of the provided value.

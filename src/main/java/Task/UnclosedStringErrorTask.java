@@ -30,43 +30,13 @@ public class UnclosedStringErrorTask extends Task {
     }
 
     /**
-     * Creates gaps in the generated code by introducing gaps that may lead to an "unclosed string literal" error.
-     */
-    protected void createGapsInCode() {
-        Random random = new Random();
-        StringBuilder code = new StringBuilder(taskCodeWithoutGaps);
-        List<String> words = new ArrayList<>(Arrays.stream(code.toString().split("(?<=;)|(?=;)|(?<=\\()|(?=\\()|(?<=\\))|(?=\\))|\\s+"))
-                .filter(word -> !word.isEmpty() && !word.isBlank())
-                .toList());
-
-        createStringLiteralGap(code, random);
-
-        for (int i = 0; i < 4; i++) {
-            if (words.isEmpty()) break; // Prevents IndexOutOfBoundsException
-
-            int index = random.nextInt(words.size());
-            String gap = words.get(index);
-
-            List<Integer> positions = findAllOccurrencesOfWords(code.toString(), gap);
-            if (!positions.isEmpty()) {
-                int position = positions.get(random.nextInt(positions.size()));
-                code.replace(position, position + gap.length(), "[" + gap + "]");
-            }
-
-            words.remove(index);
-        }
-
-        taskCodeWithGaps.setLength(0);
-        taskCodeWithGaps.append(code);
-    }
-
-    /**
      * Creates a gap in the code by replacing a string literal with a gap.
      *
      * @param code   the code snippet to introduce the gap
      * @param random the random number generator
      */
-    private void createStringLiteralGap(StringBuilder code, Random random) {
+    @Override
+    protected void createSolutionGap(StringBuilder code, Random random) {
         List<Integer> stringPositions = findAllOccurrencesOfWords(code.toString(), "\"");
         if (stringPositions.size() >= 2) {
             int startPosition = stringPositions.get(random.nextInt(stringPositions.size()));
