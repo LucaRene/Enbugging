@@ -2,8 +2,6 @@ package Task;
 
 import Context.ContextStrategy;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -17,8 +15,8 @@ public class SemicolonErrorTask extends Task {
      *
      * @param context the context used to generate attributes and methods
      */
-    public SemicolonErrorTask(ContextStrategy context) {
-        super(context);
+    public SemicolonErrorTask(ContextStrategy context, int gapCount) {
+        super(context, gapCount);
         expectedErrorMessage = "';' expected";
         createGapsInCode();
     }

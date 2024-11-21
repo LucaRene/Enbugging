@@ -17,6 +17,7 @@ public abstract class Task {
     protected final StringBuilder taskCodeWithGaps;
     protected final ContextStrategy context;
     protected final List<String> generatedAttributes;
+    protected final int gapCount;
     protected String expectedErrorMessage;
 
     /**
@@ -25,14 +26,18 @@ public abstract class Task {
      *
      * @param context the context used to generate attributes and methods
      */
-    public Task(ContextStrategy context) {
+    public Task(ContextStrategy context, int gapCount) {
         this.context = context;
         this.taskCodeWithoutGaps = new StringBuilder();
         this.taskCodeWithGaps = new StringBuilder();
         this.generatedAttributes = new ArrayList<>();
+        this.gapCount = gapCount;
         generateTaskCode();
     }
 
+    /**
+     * Generates a random class with variables, getter and setter methods, based on context attributes.
+     */
     public void generateTaskCode(){
         createClassDeclaration();
         createVariable();
@@ -119,7 +124,7 @@ public abstract class Task {
 
         createSolutionGap(code, random);
 
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < gapCount-1; i++) {
 
             int index = random.nextInt(words.size());
             String gap = words.get(index);
@@ -131,6 +136,12 @@ public abstract class Task {
 
             List<Integer> positions = findAllOccurrencesOfWords(code.toString(), gap);
             int position = positions.get(random.nextInt(positions.size()));
+
+            if (code.charAt(position-1) == '[') {
+                i--;
+                continue;
+            }
+
             code.replace(position, position + gap.length(), "[" + gap + "]");
 
             words.remove(index);

@@ -29,17 +29,18 @@ public class TaskFactory {
      * @param taskType Ignored parameter for the task type (can be used for future expansion).
      * @return A new Task instance with a randomly selected context.
      */
-    public static Task createTask(String taskType) {
+    public static Task createTask(String taskType, int gapCount) {
 
         ContextStrategy context = CONTEXTS.get(RANDOM.nextInt(CONTEXTS.size()));
 
+
         switch (taskType) {
             case "SemicolonErrorTask":
-                return new SemicolonErrorTask(context);
+                return new SemicolonErrorTask(context, gapCount);
             case "UnclosedStringErrorTask":
-                return new UnclosedStringErrorTask(context);
+                return new UnclosedStringErrorTask(context, gapCount);
             case "ReachedEndOfFileErrorTask":
-                return new ReachedEndOfFileErrorTask(context);
+                return new ReachedEndOfFileErrorTask(context, gapCount);
             default:
                 return null;
         }

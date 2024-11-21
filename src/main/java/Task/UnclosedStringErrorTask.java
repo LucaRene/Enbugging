@@ -2,8 +2,6 @@ package Task;
 
 import Context.ContextStrategy;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -17,8 +15,8 @@ public class UnclosedStringErrorTask extends Task {
      *
      * @param context the context used to generate attributes and methods
      */
-    public UnclosedStringErrorTask(ContextStrategy context) {
-        super(context);
+    public UnclosedStringErrorTask(ContextStrategy context, int gapCount) {
+        super(context, gapCount);
 
         while (!getTaskCodeWithoutGaps().contains("String")){
             taskCodeWithoutGaps.setLength(0);

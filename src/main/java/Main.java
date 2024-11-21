@@ -9,6 +9,7 @@ public class Main {
 
     public static void main(String[] args) {
         Random random = new Random();
+        final int gapCount = 6;
 
         List<String> possibleErrors= new ArrayList<String>();
         possibleErrors.add("SemicolonErrorTask");
@@ -16,16 +17,17 @@ public class Main {
         possibleErrors.add("ReachedEndOfFileErrorTask");
 
 
-        Task t = TaskFactory.createTask(possibleErrors.get(random.nextInt(possibleErrors.size())));
-        //Task t = TaskFactory.createTask("SemicolonErrorTask");
-        //Task t = TaskFactory.createTask("UnclosedStringErrorTask");
-        //Task t = TaskFactory.createTask("ReachedEndOfFileErrorTask");
+        Task t = TaskFactory.createTask(possibleErrors.get(random.nextInt(possibleErrors.size())), gapCount);
+        //Task t = TaskFactory.createTask("SemicolonErrorTask", gapCount);
+        //Task t = TaskFactory.createTask("UnclosedStringErrorTask", gapCount);
+        //Task t = TaskFactory.createTask("ReachedEndOfFileErrorTask", gapCount);
 
         System.out.println();
         System.out.println("Verändere den Code so, dass der folgende Fehler erzeugt wird:");
         System.out.println(t.getExpectedErrorMessage());
         System.out.println();
         System.out.println(t.getTaskCodeWithGaps());
+        System.out.println();
 
         CodeCompiler compiler = new CodeCompiler();
         List<String> errors = compiler.compile(t.getClassName(), t.getTaskCodeWithoutGaps());
