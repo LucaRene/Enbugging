@@ -143,7 +143,7 @@ public abstract class Task {
 
             int position = positions.get(random.nextInt(positions.size()));
 
-            if (position != 0 && code.charAt(position-1) == '[' && code.charAt(position+gap.length()) == ']') {
+            if (position != 0 && code.charAt(position-1) == '[') {
                 i--;
                 continue;
             }
