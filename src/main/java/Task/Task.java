@@ -135,9 +135,15 @@ public abstract class Task {
             }
 
             List<Integer> positions = findAllOccurrencesOfWords(code.toString(), gap);
+
+            if (positions.isEmpty()) {
+                i--;
+                continue;
+            }
+
             int position = positions.get(random.nextInt(positions.size()));
 
-            if (code.charAt(position-1) == '[') {
+            if (position != 0 && code.charAt(position-1) == '[' && code.charAt(position+gap.length()) == ']') {
                 i--;
                 continue;
             }

@@ -20,6 +20,8 @@ public class UnclosedStringErrorTask extends Task {
 
         while (!getTaskCodeWithoutGaps().contains("String")){
             taskCodeWithoutGaps.setLength(0);
+            taskCodeWithoutGaps.delete(0, taskCodeWithoutGaps.length());
+            generatedAttributes.clear();
             generateTaskCode();
         }
 
