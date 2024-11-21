@@ -1,9 +1,9 @@
+package Task;
+
 import Context.ContextStrategy;
 import Context.PersonContext;
 import Context.PlayerContext;
 import Context.VehicleContext;
-
-import Task.*;
 
 import java.util.Arrays;
 import java.util.List;
