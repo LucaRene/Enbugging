@@ -3,6 +3,7 @@ package Task;
 import Context.ContextStrategy;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -10,12 +11,14 @@ import java.util.Random;
  * The Task class generates a random, syntactically correct Java class code snippet.
  * It utilizes a specified context to generate attributes and methods for the class.
  */
-public class Task {
+public abstract class Task {
 
-    private final StringBuilder taskCode;
-    private final ContextStrategy context;
-    private final List<String> generatedAttributes;
-    //private String expectedErrorMessage;
+    protected final StringBuilder taskCodeWithoutGaps;
+    protected final StringBuilder taskCodeWithGaps;
+    protected final ContextStrategy context;
+    protected final List<String> generatedAttributes;
+    protected final int gapCount;
+    protected String expectedErrorMessage;
 
     /**
      * Constructs a new Task with the specified context, generating a random class
@@ -23,11 +26,19 @@ public class Task {
      *
      * @param context the context used to generate attributes and methods
      */
-    public Task(ContextStrategy context) {
+    public Task(ContextStrategy context, int gapCount) {
         this.context = context;
-        this.taskCode = new StringBuilder();
+        this.taskCodeWithoutGaps = new StringBuilder();
+        this.taskCodeWithGaps = new StringBuilder();
         this.generatedAttributes = new ArrayList<>();
+        this.gapCount = gapCount;
+        generateTaskCode();
+    }
 
+    /**
+     * Generates a random class with variables, getter and setter methods, based on context attributes.
+     */
+    public void generateTaskCode(){
         createClassDeclaration();
         createVariable();
         createVariable();
@@ -40,7 +51,7 @@ public class Task {
      * Generates the class declaration based on the context class name.
      */
     public void createClassDeclaration() {
-        taskCode.append("\n").append("public class ").append(context.getClassName()).append(" {").append("\n\n");
+        taskCodeWithoutGaps.append("public class ").append(context.getClassName()).append(" {").append("\n\n");
     }
 
     /**
@@ -57,7 +68,7 @@ public class Task {
         }
 
         String variableDeclaration = "\t" + getJavaType(value) + " " + attribute + " = " + formatValue(value) + ";";
-        taskCode.append(variableDeclaration).append("\n");
+        taskCodeWithoutGaps.append(variableDeclaration).append("\n");
         generatedAttributes.add(attribute);
     }
 
@@ -74,7 +85,7 @@ public class Task {
         String attribute = generatedAttributes.get(random.nextInt(generatedAttributes.size()));
         String getter = "\n\tpublic " + getJavaType(context.getRandomValueForAttribute(attribute)) +
                 " get" + capitalize(attribute) + "() {\n\t\treturn " + attribute + ";\n\t}";
-        taskCode.append(getter).append("\n");
+        taskCodeWithoutGaps.append(getter).append("\n");
     }
 
     /**
@@ -91,15 +102,68 @@ public class Task {
         String setter = "\n\tpublic void set" + capitalize(attribute) +
                 "(" + getJavaType(context.getRandomValueForAttribute(attribute)) + " " + attribute +
                 ") {\n\t\tthis." + attribute + " = " + attribute + ";\n\t}";
-        taskCode.append(setter).append("\n");
+        taskCodeWithoutGaps.append(setter).append("\n");
     }
 
     /**
      * Closes the generated class code with a closing brace.
      */
     public void closeClass() {
-        taskCode.append("}\n");
+        taskCodeWithoutGaps.append("}");
     }
+
+    /**
+     * Creates gaps in the generated code by replacing selected keywords or symbols with gaps.
+     */
+    protected void createGapsInCode() {
+        Random random = new Random();
+        StringBuilder code = new StringBuilder(taskCodeWithoutGaps);
+        List<String> words = new ArrayList<>(Arrays.stream(code.toString().split("(?<=;)|(?=;)|(?<=\\()|(?=\\()|(?<=\\))|(?=\\))|\\s+"))
+                .filter(word -> !word.isEmpty())
+                .toList());
+
+        createSolutionGap(code, random);
+
+        for (int i = 0; i < gapCount-1; i++) {
+
+            int index = random.nextInt(words.size());
+            String gap = words.get(index);
+
+            while (gap.isEmpty() || gap.isBlank()) {
+                index = random.nextInt(words.size());
+                gap = words.get(index);
+            }
+
+            List<Integer> positions = findAllOccurrencesOfWords(code.toString(), gap);
+
+            if (positions.isEmpty()) {
+                i--;
+                continue;
+            }
+
+            int position = positions.get(random.nextInt(positions.size()));
+
+            if (position != 0 && code.charAt(position-1) == '[') {
+                i--;
+                continue;
+            }
+
+            code.replace(position, position + gap.length(), "[" + gap + "]");
+
+            words.remove(index);
+        }
+
+        taskCodeWithGaps.setLength(0);
+        taskCodeWithGaps.append(code);
+    }
+
+    /**
+     * Creates a gap in the code by replacing a semicolon with a gap.
+     *
+     * @param code   the code snippet to modify
+     * @param random the random number generator
+     */
+    protected abstract void createSolutionGap(StringBuilder code, Random random);
 
     /**
      * Determines the Java data type of the provided value.
@@ -139,12 +203,47 @@ public class Task {
     }
 
     /**
+     * Finds all occurrences of a substring within a string.
+     *
+     * @param text the text to search for the substring
+     * @param sub  the substring to find within the text
+     * @return a list of positions where the substring occurs in the text
+     */
+    protected List<Integer> findAllOccurrencesOfWords(String text, String sub) {
+        List<Integer> positions = new ArrayList<>();
+        int index = text.indexOf(sub);
+        while (index >= 0) {
+            positions.add(index);
+            index = text.indexOf(sub, index + sub.length());
+        }
+        return positions;
+    }
+
+    /**
      * Returns the complete generated code for the class as a String.
      *
      * @return the generated class code
      */
-    public String getTaskCode() {
-        return taskCode.toString();
+    public String getTaskCodeWithGaps() {
+        return taskCodeWithGaps.toString();
+    }
+
+    /**
+     * Returns the name of the generated class.
+     *
+     * @return the name of the generated class
+     */
+    public String getTaskCodeWithoutGaps() {
+        return taskCodeWithoutGaps.toString();
+    }
+
+    /**
+     * Returns the name of the generated class.
+     *
+     * @return the name of the generated class
+     */
+    public String getClassName() {
+        return context.getClassName();
     }
 
     /**
@@ -154,5 +253,14 @@ public class Task {
      */
     public List<String> getGeneratedAttributes() {
         return new ArrayList<>(generatedAttributes);
+    }
+
+    /**
+     * Retrieves the expected error message for this task.
+     *
+     * @return the expected error message
+     */
+    public String getExpectedErrorMessage() {
+        return expectedErrorMessage;
     }
 }

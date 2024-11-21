@@ -2,6 +2,7 @@ package Task;
 
 import Context.ContextStrategy;
 import Context.VehicleContext;
+import Compiler.CodeCompiler;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,7 +25,7 @@ public class TaskTest {
     @BeforeEach
     public void setUp() {
         context = new VehicleContext();
-        task = new Task(context);
+        task = new SemicolonErrorTask(context, 7);
     }
 
     /**
@@ -33,7 +34,7 @@ public class TaskTest {
      */
     @Test
     public void testCreateClassDeclaration() {
-        String classDeclaration = task.getTaskCode();
+        String classDeclaration = task.getTaskCodeWithGaps();
         assertTrue(classDeclaration.contains("public class " + context.getClassName()),
                 "Class declaration should contain 'public class' with the context class name.");
     }
@@ -44,9 +45,9 @@ public class TaskTest {
      */
     @Test
     public void testCreateVariable() {
-        int initialSize = task.getTaskCode().split("=").length - 1;
+        int initialSize = task.getTaskCodeWithGaps().split("=").length - 1;
         task.createVariable();
-        int newSize = task.getTaskCode().split("=").length - 1;
+        int newSize = task.getTaskCodeWithGaps().split("=").length - 1;
         assertTrue(newSize > initialSize, "Variable should be added to the class.");
     }
 
@@ -57,7 +58,7 @@ public class TaskTest {
     @Test
     public void testUniqueAttributesForVariables() {
         for (int i = 0; i < 10; i++) {
-            task = new Task(context);
+            task = new SemicolonErrorTask(context, 7);
             List<String> attributes = task.getGeneratedAttributes();
             task.createVariable();
             task.createVariable();
@@ -73,9 +74,9 @@ public class TaskTest {
     @Test
     public void testCreateGetter() {
         task.createVariable(); // Ensure there's an attribute to generate a getter for
-        int initialCount = task.getTaskCode().split("get").length - 1;
+        int initialCount = task.getTaskCodeWithGaps().split("get").length - 1;
         task.createGetter();
-        int newCount = task.getTaskCode().split("get").length - 1;
+        int newCount = task.getTaskCodeWithGaps().split("get").length - 1;
         assertTrue(newCount > initialCount, "Getter should be added to the class.");
     }
 
@@ -86,9 +87,9 @@ public class TaskTest {
     @Test
     public void testCreateSetter() {
         task.createVariable(); // Ensure there's an attribute to generate a setter for
-        int initialCount = task.getTaskCode().split("set").length - 1;
+        int initialCount = task.getTaskCodeWithGaps().split("set").length - 1;
         task.createSetter();
-        int newCount = task.getTaskCode().split("set").length - 1;
+        int newCount = task.getTaskCodeWithGaps().split("set").length - 1;
         assertTrue(newCount > initialCount, "Setter should be added to the class.");
     }
 
@@ -98,7 +99,14 @@ public class TaskTest {
     @Test
     public void testCloseClass() {
         task.closeClass();
-        String taskCode = task.getTaskCode().trim();
+        String taskCode = task.getTaskCodeWithGaps().trim();
         assertTrue(taskCode.endsWith("}"), "Class should be properly closed with '}'.");
+    }
+
+    @Test
+    public void testCorrectCode(){
+        CodeCompiler codeCompiler = new CodeCompiler();
+        List<String> errors = codeCompiler.compile(task.getClassName(), task.getTaskCodeWithoutGaps());
+        assertTrue(errors.isEmpty(), "Compilation should be successful.");
     }
 }

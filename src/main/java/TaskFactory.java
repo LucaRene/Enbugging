@@ -2,7 +2,8 @@ import Context.ContextStrategy;
 import Context.PersonContext;
 import Context.PlayerContext;
 import Context.VehicleContext;
-import Task.Task;
+
+import Task.*;
 
 import java.util.Arrays;
 import java.util.List;
@@ -28,8 +29,20 @@ public class TaskFactory {
      * @param taskType Ignored parameter for the task type (can be used for future expansion).
      * @return A new Task instance with a randomly selected context.
      */
-    public static Task createTask(String taskType) {
+    public static Task createTask(String taskType, int gapCount) {
+
         ContextStrategy context = CONTEXTS.get(RANDOM.nextInt(CONTEXTS.size()));
-        return new Task(context);
+
+
+        switch (taskType) {
+            case "SemicolonErrorTask":
+                return new SemicolonErrorTask(context, gapCount);
+            case "UnclosedStringErrorTask":
+                return new UnclosedStringErrorTask(context, gapCount);
+            case "ReachedEndOfFileErrorTask":
+                return new ReachedEndOfFileErrorTask(context, gapCount);
+            default:
+                return null;
+        }
     }
 }
