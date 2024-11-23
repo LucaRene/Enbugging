@@ -1,5 +1,6 @@
 package Web.Controller;
 
+import Task.Task;
 import Web.Service.TaskService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,7 +18,7 @@ public class TaskController {
     }
 
     @GetMapping("/task")
-    public String getTask() {
-        return taskService.getTaskAsHtmlWithDescription();
+    public Task getTask() {
+        return taskService.generateRandomTask();
     }
 }

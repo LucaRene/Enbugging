@@ -28,21 +28,4 @@ public class TaskService {
 
         return TaskFactory.createTask(possibleErrors.get(random.nextInt(possibleErrors.size())), 6);
     }
-
-    /**
-     * Generates a random task and returns the task code with gaps as HTML.
-     *
-     * @return the task code with gaps as HTML
-     */
-    public String getTaskAsHtmlWithDescription() {
-        Task task = generateRandomTask();
-        return "<html>" +
-                "<body>" +
-                "<h1>Aufgabe</h1>" +
-                "<p>Verändere den Code, damit folgender Fehler entsteht:</p>" +
-                "<h2>" + task.getExpectedErrorMessage() + "</h2>" +
-                "<pre>" + task.getTaskCodeWithGaps() + "</pre>" +
-                "</body>" +
-                "</html>";
-    }
 }

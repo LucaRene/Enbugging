@@ -1,11 +1,21 @@
-import React from "react";
-import TaskViewer from "./components/TaskViewer.jsx";
-import "./App.css";
+import React, { useEffect, useState } from "react";
+import TaskViewer from "./components/TaskViewer";
 
 function App() {
+    const [taskData, setTaskData] = useState({ taskCodeWithGaps: "", expectedErrorMessage: "" });
+
+    useEffect(() => {
+        fetch("http://localhost:8080/task")
+            .then((response) => response.json())
+            .then((data) => {
+                setTaskData(data);
+            })
+            .catch((error) => console.error("Error fetching task:", error));
+    }, []);
+
     return (
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", minHeight: "100vh" }}>
-            <TaskViewer />
+        <div>
+            <TaskViewer taskCode={taskData.taskCodeWithGaps} errorMessage={taskData.expectedErrorMessage} />
         </div>
     );
 }
