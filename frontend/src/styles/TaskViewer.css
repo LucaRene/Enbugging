@@ -71,3 +71,46 @@ body {
     color: #888;
     cursor: not-allowed;
 }
+
+.actions {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.validate-button {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.validate-button:hover {
+    background-color: #45a049;
+}
+
+.feedback {
+    margin-top: 10px;
+    font-size: 1.2rem;
+    color: #ffb0b0;
+    text-align: center;
+    white-space: pre-wrap;
+}
+
+.reset-button {
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    margin-left: 10px;
+}
+
+.reset-button:hover {
+    background-color: #c82333;
+}
