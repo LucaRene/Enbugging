@@ -5,9 +5,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
- * REST Controller to compile Java code and return errors or success messages.
+ * REST Controller to compile Java code and evaluate if the task is solved correctly.
  */
 @RestController
 @RequestMapping("/api/compiler")
@@ -20,25 +21,35 @@ public class CompilerController {
     }
 
     /**
-     * Compiles the provided Java code and returns errors or a success message.
+     * Compiles the provided Java code and evaluates if the task is solved correctly.
      *
-     * @param request the compilation request containing the class name and code
-     * @return a ResponseEntity with the compilation result
+     * @param request the compilation request containing the code and expected error
+     * @return a ResponseEntity with the expected error, actual compiler output, and evaluation result
      */
     @PostMapping
     public ResponseEntity<?> compileCode(@RequestBody CompileRequest request) {
         String code = request.getCode();
+        String expectedError = request.getExpectedError();
 
         if (code == null || code.isBlank()) {
-            return ResponseEntity.badRequest().body("Code must be provided.");
+            return ResponseEntity.badRequest().body(Map.of(
+                    "status", "error",
+                    "message", "Code must be provided.",
+                    "actualError", "",
+                    "evaluation", "Incorrect"
+            ));
         }
 
         List<String> errors = codeCompiler.compile(code);
-        if (errors.isEmpty()) {
-            return ResponseEntity.ok("Code compiled successfully! ✅");
-        } else {
-            return ResponseEntity.badRequest().body(errors);
-        }
-    }
+        String actualError = errors.isEmpty() ? "No errors" : errors.get(0);
 
+        boolean isCorrect = actualError.contains(expectedError);
+
+        return ResponseEntity.ok(Map.of(
+                "status", isCorrect ? "success" : "error",
+                "expectedError", expectedError,
+                "actualError", actualError,
+                "evaluation", isCorrect ? "Correct" : "Incorrect"
+        ));
+    }
 }

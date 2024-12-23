@@ -7,6 +7,9 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
 
+/**
+ * Utility class to compile Java code and return errors or warnings.
+ */
 public class CodeCompiler {
 
     /**
@@ -16,7 +19,7 @@ public class CodeCompiler {
      * @return a list of compilation errors or warnings, or an empty list if successful
      */
     public List<String> compile(String code) {
-        String className = extractClassName(code); // Dynamischer Klassenname
+        String className = extractClassName(code); // Extract class name dynamically
         return compile(className, code);
     }
 

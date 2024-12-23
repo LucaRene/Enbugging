@@ -4,18 +4,18 @@ body {
     align-items: center;
     margin: 0;
     padding: 0;
-    height: 100vh;
     background-color: #121212;
 }
 
 .container {
-    max-width: 800px;
     padding: 20px;
     text-align: left;
     font-family: Arial, sans-serif;
-    background: #1e1e1e;
+    background: #2e2e2e;
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
 }
 
 .container header h1 {
@@ -34,16 +34,14 @@ body {
 }
 
 .container pre {
-    background: #1e1e1e;
+    background: #2e2e2e;
     color: #fff;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     padding: 20px;
     border: 2px solid #00bcd4;
     border-radius: 5px;
     line-height: 1.8;
     overflow-x: auto;
-    max-width: 100%;
-    min-height: 300px;
 }
 
 .container input {
@@ -70,6 +68,41 @@ body {
     background-color: #444;
     color: #888;
     cursor: not-allowed;
+}
+
+.content {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    align-items: stretch;
+}
+
+.code-section {
+    flex: 1;
+    margin-right: 20px;
+}
+
+.evaluation-panel {
+    flex: 1;
+    border: 2px solid #2e2e2e;
+    background-color: #2e2e2e;
+    padding: 10px;
+    border-radius: 5px;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.evaluation-panel pre {
+    height: auto;
+    margin: 0;
+    overflow: auto;
+    background-color: #2e2e2e;
+    color: #fff;
+    padding: 10px;
+    border-radius: 5px;
+    line-height: 1.5;
+    white-space: pre-wrap;
+    word-wrap: break-word;
 }
 
 .actions {

@@ -5,10 +5,16 @@ import "../styles/TaskViewer.css";
  * TaskViewer Component
  * Displays the task description, the editable code, and actions to validate or reset the task.
  */
-const TaskViewer = ({ taskCode, errorMessage }) => {
+const TaskViewer = ({ taskCode, errorMessage, fetchNewTask }) => {
     const [editableValues, setEditableValues] = useState({});
     const [activeIndex, setActiveIndex] = useState(null);
     const [feedbackMessage, setFeedbackMessage] = useState("");
+    const [showEvaluation, setShowEvaluation] = useState(false);
+    const [expectedError, setExpectedError] = useState("");
+    const [actualError, setActualError] = useState("");
+    const [evaluation, setEvaluation] = useState("");
+    const [isTaskComplete, setIsTaskComplete] = useState(false);
+
     const originalValues = taskCode.split(/(\[.*?\])/).map((part) =>
         part.startsWith("[") && part.endsWith("]") ? part.slice(1, -1) : null
     );
@@ -20,7 +26,7 @@ const TaskViewer = ({ taskCode, errorMessage }) => {
      * @param {string} value - The current value of the input field.
      */
     const adjustInputWidth = (element, value) => {
-        const length = value.length || 1; // Minimum 1 character width
+        const length = value.length || 1;
         element.style.width = `${length + 1}ch`;
     };
 
@@ -62,6 +68,51 @@ const TaskViewer = ({ taskCode, errorMessage }) => {
         setEditableValues({});
         setActiveIndex(null);
         setFeedbackMessage("");
+        setExpectedError("");
+        setActualError("");
+        setEvaluation("");
+        setShowEvaluation(false);
+        setIsTaskComplete(false);
+    };
+
+    /**
+     * Sends the user's code to the server for validation and displays the response.
+     */
+    const validateCode = async () => {
+        const parts = taskCode.split(/(\[.*?\])/);
+        const userCode = parts
+            .map((part, index) =>
+                part.startsWith("[") && part.endsWith("]")
+                    ? editableValues[index] !== undefined
+                        ? editableValues[index]
+                        : part.slice(1, -1)
+                    : part
+            )
+            .join("");
+
+        try {
+            const response = await fetch("http://localhost:8080/api/compiler", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ code: userCode, expectedError: errorMessage }),
+            });
+
+            console.log("API-Antwort erhalten:", response); // Debugging
+
+            const result = await response.json();
+            if (response.ok) {
+                setExpectedError(result.expectedError);
+                setActualError(result.actualError);
+                setEvaluation(result.evaluation);
+                setIsTaskComplete(result.evaluation === "Correct");
+                setShowEvaluation(true);
+            } else {
+                setFeedbackMessage("Ein Fehler ist aufgetreten.");
+            }
+        } catch (error) {
+            console.error("Fehler:", error); // Debugging
+            setFeedbackMessage(`Fehler beim Senden der Anfrage: ${error.message}`);
+        }
     };
 
     /**
@@ -99,45 +150,8 @@ const TaskViewer = ({ taskCode, errorMessage }) => {
         });
     };
 
-    /**
-     * Sends the user's code to the server for validation and displays the response.
-     */
-    const validateCode = async () => {
-        const parts = taskCode.split(/(\[.*?\])/);
-        const userCode = parts
-            .map((part, index) =>
-                part.startsWith("[") && part.endsWith("]")
-                    ? editableValues[index] !== undefined
-                        ? editableValues[index]
-                        : part.slice(1, -1)
-                    : part
-            )
-            .join("");
-
-        try {
-            const response = await fetch("http://localhost:8080/api/compiler", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    code: userCode,
-                }),
-            });
-
-            if (response.ok) {
-                const message = await response.text();
-                setFeedbackMessage(message);
-            } else {
-                const errors = await response.json();
-                setFeedbackMessage(errors.join("\n"));
-            }
-        } catch (error) {
-            setFeedbackMessage(`Fehler beim Senden der Anfrage: ${error.message}`);
-        }
-    };
-
     return (
         <div className="container">
-            {/* Task Description */}
             <header>
                 <h1>Aufgabenstellung</h1>
                 <p>
@@ -145,12 +159,26 @@ const TaskViewer = ({ taskCode, errorMessage }) => {
                 </p>
             </header>
 
-            {/* Editable Code */}
-            <section>
-                <pre>{renderCodeWithInputs()}</pre>
-            </section>
+            <div className="content">
+                <section className="code-section">
+                    <pre>{renderCodeWithInputs()}</pre>
+                </section>
 
-            {/* Actions */}
+                {showEvaluation && (
+                    <div className="evaluation-panel">
+                        <h3>Auswertung</h3>
+                        <p><strong>Zielfehlermeldung:</strong></p>
+                        <pre>{expectedError}</pre>
+                        <p><strong>Tatsächlicher Output des Compilers:</strong></p>
+                        <pre>{actualError}</pre>
+                        <p><strong>Auswertung:</strong> {evaluation}</p>
+                        {isTaskComplete && (
+                            <button onClick={fetchNewTask} className="next-task-button">Nächste Aufgabe</button>
+                        )}
+                    </div>
+                )}
+            </div>
+
             <div className="actions">
                 <button onClick={validateCode} className="validate-button">
                     Aufgabe prüfen
