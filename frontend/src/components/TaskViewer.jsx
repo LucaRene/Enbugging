@@ -14,10 +14,12 @@ const TaskViewer = ({ taskCode, errorMessage, fetchNewTask }) => {
     const [actualError, setActualError] = useState("");
     const [evaluation, setEvaluation] = useState("");
     const [isTaskComplete, setIsTaskComplete] = useState(false);
+    const [isDisabled, setIsDisabled] = useState(false);
 
     const originalValues = taskCode.split(/(\[.*?\])/).map((part) =>
         part.startsWith("[") && part.endsWith("]") ? part.slice(1, -1) : null
     );
+
 
     /**
      * Dynamically adjusts the width of input fields based on their content.
@@ -73,6 +75,7 @@ const TaskViewer = ({ taskCode, errorMessage, fetchNewTask }) => {
         setEvaluation("");
         setShowEvaluation(false);
         setIsTaskComplete(false);
+        setIsDisabled(false);
     };
 
     /**
@@ -104,8 +107,9 @@ const TaskViewer = ({ taskCode, errorMessage, fetchNewTask }) => {
                 setExpectedError(result.expectedError);
                 setActualError(result.actualError);
                 setEvaluation(result.evaluation);
-                setIsTaskComplete(result.evaluation === "Correct");
+                setIsTaskComplete(result.evaluation.includes("Richtig!"));
                 setShowEvaluation(true);
+                setIsDisabled(true);
             } else {
                 setFeedbackMessage("Ein Fehler ist aufgetreten.");
             }
@@ -132,7 +136,7 @@ const TaskViewer = ({ taskCode, errorMessage, fetchNewTask }) => {
                         value={editableValues[index] !== undefined ? editableValues[index] : cleanPart}
                         className="editable-input"
                         onChange={(e) => handleInputChange(index, e.target.value, e.target)}
-                        disabled={activeIndex !== null && activeIndex !== index}
+                        disabled={(activeIndex !== null && activeIndex !== index) || isDisabled}
                         style={{
                             border: "1px solid #ccc",
                             borderRadius: "4px",
@@ -140,8 +144,8 @@ const TaskViewer = ({ taskCode, errorMessage, fetchNewTask }) => {
                             margin: "0 2px",
                             fontFamily: "monospace",
                             minWidth: `${cleanPart.length + 1}ch`,
-                            backgroundColor: activeIndex !== null && activeIndex !== index ? "#444" : "#2e2e2e",
-                            color: activeIndex !== null && activeIndex !== index ? "#888" : "#fff",
+                            backgroundColor: isDisabled || (activeIndex !== null && activeIndex !== index) ? "#444" : "#2e2e2e",
+                            color: isDisabled || (activeIndex !== null && activeIndex !== index) ? "#888" : "#fff",
                         }}
                     />
                 );
@@ -154,9 +158,8 @@ const TaskViewer = ({ taskCode, errorMessage, fetchNewTask }) => {
         <div className="container">
             <header>
                 <h1>Aufgabenstellung</h1>
-                <p>
-                    Verändere den Code, damit folgender Fehler entsteht: <br /> {errorMessage}
-                </p>
+                <p> Verändere den Code, damit folgender Fehler entsteht: </p>
+                <p className="expected-error-message"> {errorMessage} </p>
             </header>
 
             <div className="content">
@@ -165,16 +168,18 @@ const TaskViewer = ({ taskCode, errorMessage, fetchNewTask }) => {
                 </section>
 
                 {showEvaluation && (
-                    <div className="evaluation-panel">
+                    <div
+                        className={`evaluation-panel ${
+                            isTaskComplete ? "correct" : "incorrect"
+                        }`}
+                    >
                         <h3>Auswertung</h3>
                         <p><strong>Zielfehlermeldung:</strong></p>
                         <pre>{expectedError}</pre>
                         <p><strong>Tatsächlicher Output des Compilers:</strong></p>
                         <pre>{actualError}</pre>
-                        <p><strong>Auswertung:</strong> {evaluation}</p>
-                        {isTaskComplete && (
-                            <button onClick={fetchNewTask} className="next-task-button">Nächste Aufgabe</button>
-                        )}
+                        <p><strong>Auswertung:</strong> </p>
+                        <pre> {evaluation} </pre>
                     </div>
                 )}
             </div>
@@ -186,6 +191,12 @@ const TaskViewer = ({ taskCode, errorMessage, fetchNewTask }) => {
                 <button onClick={resetTask} className="reset-button">
                     Zurücksetzen
                 </button>
+                {showEvaluation && isTaskComplete && (
+                    <button onClick={() => {
+                        resetTask();
+                        fetchNewTask();
+                    }} className="next-task-button"> Nächste Aufgabe</button>
+                )}
                 {feedbackMessage && <p className="feedback">{feedbackMessage}</p>}
             </div>
         </div>
