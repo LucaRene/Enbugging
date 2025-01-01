@@ -1,4 +1,4 @@
-import Task.Task;
+import Task.*;
 import Compiler.CodeCompiler;
 
 import java.util.ArrayList;
@@ -11,16 +11,16 @@ public class Main {
         Random random = new Random();
         final int gapCount = 6;
 
-        List<String> possibleErrors = new ArrayList<String>();
+        List<String> possibleErrors = new ArrayList<>();
         possibleErrors.add("SemicolonErrorTask");
         possibleErrors.add("UnclosedStringErrorTask");
         possibleErrors.add("ReachedEndOfFileErrorTask");
 
         for (int i = 0; i < 1; i++) {
             Task t = TaskFactory.createTask(possibleErrors.get(random.nextInt(possibleErrors.size())), gapCount);
-            //Task t = TaskFactory.createTask("SemicolonErrorTask", gapCount);
-            //Task t = TaskFactory.createTask("UnclosedStringErrorTask", gapCount);
-            //Task t = TaskFactory.createTask("ReachedEndOfFileErrorTask", gapCount);
+            //Task t = Task.TaskFactory.createTask("SemicolonErrorTask", gapCount);
+            //Task t = Task.TaskFactory.createTask("UnclosedStringErrorTask", gapCount);
+            //Task t = Task.TaskFactory.createTask("ReachedEndOfFileErrorTask", gapCount);
 
             System.out.println();
             System.out.println("Verändere den Code so, dass der folgende Fehler erzeugt wird:");
