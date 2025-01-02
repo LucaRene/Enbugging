@@ -18,7 +18,6 @@ public class SemicolonErrorTask extends Task {
     public SemicolonErrorTask(ContextStrategy context, int gapCount) {
         super(context, gapCount);
         expectedErrorMessage = "';' expected";
-        createGapsInCode();
     }
 
     /**

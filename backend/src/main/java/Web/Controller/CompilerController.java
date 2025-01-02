@@ -49,7 +49,7 @@ public class CompilerController {
                 "status", isCorrect ? "success" : "error",
                 "expectedError", expectedError,
                 "actualError", actualError,
-                "evaluation", isCorrect ? "Richtig! ✅ \n Gut gelöst! \n Gehe weiter zur nächsten Aufgabe!"
+                "evaluation", isCorrect ? "Richtig! ✅ Gut gelöst! \n Gehe weiter zur nächsten Aufgabe!"
                         : "Leider falsch! ❌ \n Versuche es gleich nochmal!"
         ));
     }

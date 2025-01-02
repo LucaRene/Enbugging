@@ -33,17 +33,31 @@ public abstract class Task {
         this.generatedAttributes = new ArrayList<>();
         this.gapCount = gapCount;
         generateTaskCode();
+        createGapsInCode();
     }
 
     /**
      * Generates a random class with variables, getter and setter methods, based on context attributes.
      */
     public void generateTaskCode(){
+        Random random = new Random();
+
         createClassDeclaration();
-        createVariable();
-        createVariable();
-        createGetter();
-        createSetter();
+
+        int variableCount = random.nextInt(3) + 1;
+        for (int i = 0; i < variableCount; i++) {
+            createVariable();
+        }
+
+        int methodCount = random.nextInt(2) + 1;
+        for (int i = 0; i < methodCount; i++) {
+            if (random.nextBoolean()) {
+                createGetter();
+            } else {
+                createSetter();
+            }
+        }
+
         closeClass();
     }
 

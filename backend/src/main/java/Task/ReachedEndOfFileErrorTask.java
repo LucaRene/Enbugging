@@ -18,7 +18,6 @@ public class ReachedEndOfFileErrorTask extends Task {
     public ReachedEndOfFileErrorTask(ContextStrategy context, int gapCount) {
         super(context, gapCount);
         expectedErrorMessage = "reached end of file while parsing";
-        createGapsInCode();
     }
 
     /**
