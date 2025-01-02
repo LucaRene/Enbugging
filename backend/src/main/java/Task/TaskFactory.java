@@ -33,7 +33,6 @@ public class TaskFactory {
 
         ContextStrategy context = CONTEXTS.get(RANDOM.nextInt(CONTEXTS.size()));
 
-
         switch (taskType) {
             case "SemicolonErrorTask":
                 return new SemicolonErrorTask(context, gapCount);
@@ -41,6 +40,8 @@ public class TaskFactory {
                 return new UnclosedStringErrorTask(context, gapCount);
             case "ReachedEndOfFileErrorTask":
                 return new ReachedEndOfFileErrorTask(context, gapCount);
+            case "CannotFindSymbolErrorTask":
+                return new CannotFindSymbolErrorTask(context, gapCount);
             default:
                 return null;
         }

@@ -13,10 +13,14 @@ import java.util.Random;
  */
 public abstract class Task {
 
+    protected final ContextStrategy context;
+
     protected final StringBuilder taskCodeWithoutGaps;
     protected final StringBuilder taskCodeWithGaps;
-    protected final ContextStrategy context;
+
     protected final List<String> generatedAttributes;
+    protected final List<String> generatedMethods;
+
     protected final int gapCount;
     protected String expectedErrorMessage;
 
@@ -31,6 +35,7 @@ public abstract class Task {
         this.taskCodeWithoutGaps = new StringBuilder();
         this.taskCodeWithGaps = new StringBuilder();
         this.generatedAttributes = new ArrayList<>();
+        this.generatedMethods = new ArrayList<>();
         this.gapCount = gapCount;
         generateTaskCode();
         createGapsInCode();
@@ -97,9 +102,15 @@ public abstract class Task {
 
         Random random = new Random();
         String attribute = generatedAttributes.get(random.nextInt(generatedAttributes.size()));
+        while (generatedMethods.contains("get" + capitalize(attribute))) {
+            attribute = generatedAttributes.get(random.nextInt(generatedAttributes.size()));
+        }
+
         String getter = "\n\tpublic " + getJavaType(context.getRandomValueForAttribute(attribute)) +
                 " get" + capitalize(attribute) + "() {\n\t\treturn " + attribute + ";\n\t}";
         taskCodeWithoutGaps.append(getter).append("\n");
+
+        generatedMethods.add("get" + capitalize(attribute));
     }
 
     /**
@@ -113,10 +124,16 @@ public abstract class Task {
 
         Random random = new Random();
         String attribute = generatedAttributes.get(random.nextInt(generatedAttributes.size()));
+        while (generatedMethods.contains("set" + capitalize(attribute))) {
+            attribute = generatedAttributes.get(random.nextInt(generatedAttributes.size()));
+        }
+
         String setter = "\n\tpublic void set" + capitalize(attribute) +
                 "(" + getJavaType(context.getRandomValueForAttribute(attribute)) + " " + attribute +
                 ") {\n\t\tthis." + attribute + " = " + attribute + ";\n\t}";
         taskCodeWithoutGaps.append(setter).append("\n");
+
+        generatedMethods.add("set" + capitalize(attribute));
     }
 
     /**
