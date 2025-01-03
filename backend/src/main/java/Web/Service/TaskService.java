@@ -28,6 +28,6 @@ public class TaskService {
         possibleErrors.add("CannotFindSymbolErrorTask");
 
         //return TaskFactory.createTask(possibleErrors.get(random.nextInt(possibleErrors.size())), 6);
-        return TaskFactory.createTask("CannotFindSymbolErrorTask", 6);
+        return TaskFactory.createTask("CannotFindSymbolErrorTask", 8);
     }
 }

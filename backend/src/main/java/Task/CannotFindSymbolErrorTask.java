@@ -35,9 +35,15 @@ public class CannotFindSymbolErrorTask extends Task {
 
         String attribute = generatedAttributes.get(random.nextInt(generatedAttributes.size()));
         List<Integer> positions = findAllOccurrencesOfWords(code.toString(), attribute);
+        List<Integer> wrongPositions = findAllOccurrencesOfWords(code.toString(), attribute + "Neu");
         while (positions.size() < 2) {
             attribute = generatedAttributes.get(random.nextInt(generatedAttributes.size()));
             positions = findAllOccurrencesOfWords(code.toString(), attribute);
+            wrongPositions = findAllOccurrencesOfWords(code.toString(), attribute + "Neu");
+        }
+
+        for (Integer i: wrongPositions) {
+            positions.remove(i);
         }
 
         int position = positions.get(random.nextInt(positions.size()));

@@ -129,8 +129,8 @@ public abstract class Task {
         }
 
         String setter = "\n\tpublic void set" + capitalize(attribute) +
-                "(" + getJavaType(context.getRandomValueForAttribute(attribute)) + " " + attribute +
-                ") {\n\t\tthis." + attribute + " = " + attribute + ";\n\t}";
+                "(" + getJavaType(context.getRandomValueForAttribute(attribute)) + " " + attribute + "Neu" +
+                ") {\n\t\tthis." + attribute + " = " + attribute + "Neu" +";\n\t}";
         taskCodeWithoutGaps.append(setter).append("\n");
 
         generatedMethods.add("set" + capitalize(attribute));
