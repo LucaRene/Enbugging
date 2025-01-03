@@ -26,8 +26,9 @@ public class TaskService {
         possibleErrors.add("UnclosedStringErrorTask");
         possibleErrors.add("ReachedEndOfFileErrorTask");
         possibleErrors.add("CannotFindSymbolErrorTask");
+        possibleErrors.add("ReturnTypeRequiredErrorTask");
 
-        //return TaskFactory.createTask(possibleErrors.get(random.nextInt(possibleErrors.size())), 6);
-        return TaskFactory.createTask("CannotFindSymbolErrorTask", 8);
+        return TaskFactory.createTask(possibleErrors.get(random.nextInt(possibleErrors.size())), 6);
+        //return TaskFactory.createTask("ReturnTypeRequiredErrorTask", 8);
     }
 }

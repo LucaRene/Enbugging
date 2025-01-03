@@ -39,6 +39,7 @@ public abstract class Task {
         this.gapCount = gapCount;
         generateTaskCode();
         createGapsInCode();
+        System.out.println(taskCodeWithGaps);
     }
 
     /**
@@ -206,6 +207,7 @@ public abstract class Task {
         if (value instanceof Integer) return "int";
         if (value instanceof Double) return "double";
         if (value instanceof String) return "String";
+        if (value instanceof Boolean) return "boolean";
         return "Object";
     }
 

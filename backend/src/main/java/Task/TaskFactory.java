@@ -42,6 +42,8 @@ public class TaskFactory {
                 return new ReachedEndOfFileErrorTask(context, gapCount);
             case "CannotFindSymbolErrorTask":
                 return new CannotFindSymbolErrorTask(context, gapCount);
+            case "ReturnTypeRequiredErrorTask":
+                return new ReturnTypeRequiredErrorTask(context, gapCount);
             default:
                 return null;
         }
