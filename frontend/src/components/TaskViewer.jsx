@@ -5,7 +5,7 @@ import "../styles/TaskViewer.css";
  * TaskViewer Component
  * Displays the task description, the editable code, and actions to validate or reset the task.
  */
-const TaskViewer = ({ taskCode, errorMessage, fetchNewTask }) => {
+const TaskViewer = ({ taskCode, errorMessage, fetchNewTask, isLoading }) => {
     const [editableValues, setEditableValues] = useState({});
     const [activeIndex, setActiveIndex] = useState(null);
     const [feedbackMessage, setFeedbackMessage] = useState("");
@@ -178,24 +178,30 @@ const TaskViewer = ({ taskCode, errorMessage, fetchNewTask }) => {
                         <pre>{expectedError}</pre>
                         <p><strong>Tatsächlicher Output des Compilers:</strong></p>
                         <pre>{actualError}</pre>
-                        <p><strong>Auswertung:</strong> </p>
+                        <p><strong>Auswertung:</strong></p>
                         <pre> {evaluation} </pre>
                     </div>
                 )}
             </div>
 
             <div className="actions">
-                <button onClick={validateCode} className="validate-button">
+                <button onClick={validateCode} className="validate-button" disabled={isLoading}>
                     Aufgabe prüfen
                 </button>
-                <button onClick={resetTask} className="reset-button">
+                <button onClick={resetTask} className="reset-button" disabled={isLoading}>
                     Zurücksetzen
                 </button>
                 {showEvaluation && isTaskComplete && (
-                    <button onClick={() => {
-                        resetTask();
-                        fetchNewTask();
-                    }} className="next-task-button"> Nächste Aufgabe</button>
+                    <button
+                        onClick={() => {
+                            resetTask();
+                            fetchNewTask();
+                        }}
+                        className="next-task-button"
+                        disabled={isLoading}
+                    >
+                        {isLoading ? "Lädt..." : "Nächste Aufgabe"}
+                    </button>
                 )}
                 {feedbackMessage && <p className="feedback">{feedbackMessage}</p>}
             </div>

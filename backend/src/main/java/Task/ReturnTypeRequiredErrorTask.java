@@ -36,7 +36,6 @@ public class ReturnTypeRequiredErrorTask extends Task {
 
         boolean returnTypeFound = false;
         boolean voidFound = false;
-
         for (String method: generatedMethods) {
             if (method.contains("get")){
                 returnTypeFound = true;

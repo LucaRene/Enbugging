@@ -6,12 +6,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import java.util.logging.Logger;
 
 /**
  * The Task class generates a random, syntactically correct Java class code snippet.
  * It utilizes a specified context to generate attributes and methods for the class.
  */
 public abstract class Task {
+
+    private static final Logger logger = Logger.getLogger(Task.class.getName());
 
     protected final ContextStrategy context;
 
@@ -37,41 +40,79 @@ public abstract class Task {
         this.generatedAttributes = new ArrayList<>();
         this.generatedMethods = new ArrayList<>();
         this.gapCount = gapCount;
+
+        logger.info("Task creation started.");
+        logger.info("Context: " + context.getClassName());
+        logger.info("Gap count: " + gapCount);
+
         generateTaskCode();
+        logger.info("Task code generated without gaps: \n" + taskCodeWithoutGaps);
+
         createGapsInCode();
-        System.out.println(taskCodeWithGaps);
+        logger.info("Task code with gaps: \n" + taskCodeWithGaps);
+
+        logger.info("Task creation finished.");
     }
 
     /**
      * Generates a random class with variables, getter and setter methods, based on context attributes.
      */
-    public void generateTaskCode(){
+    public void generateTaskCode() {
+        logger.info("Generating task code...");
         Random random = new Random();
 
         createClassDeclaration();
 
         int variableCount = random.nextInt(3) + 1;
+        logger.info("Number of variables to generate: " + variableCount);
         for (int i = 0; i < variableCount; i++) {
             createVariable();
         }
 
         int methodCount = random.nextInt(2) + 1;
+        logger.info("Number of methods to generate: " + methodCount);
+
+        boolean getterProhibited = false;
+        boolean setterProhibited = false;
         for (int i = 0; i < methodCount; i++) {
-            if (random.nextBoolean()) {
-                createGetter();
+            if (getterProhibited && setterProhibited) {
+                break;
+            } else if (getterProhibited) {
+                setterProhibited = !createSetter();
+                if (setterProhibited) {
+                    i--;
+                }
+            } else if (setterProhibited) {
+                getterProhibited = !createGetter();
+                if (getterProhibited) {
+                    i--;
+                }
             } else {
-                createSetter();
+                if (random.nextBoolean()) {
+                    getterProhibited = !createGetter();
+                    if (getterProhibited) {
+                        i--;
+                    }
+                } else {
+                    setterProhibited = !createSetter();
+                    if (setterProhibited) {
+                        i--;
+                    }
+                }
             }
         }
 
         closeClass();
+        logger.info("Task code generation complete.");
     }
 
     /**
      * Generates the class declaration based on the context class name.
      */
     public void createClassDeclaration() {
-        taskCodeWithoutGaps.append("public class ").append(context.getClassName()).append(" {").append("\n\n");
+        logger.info("Creating class declaration...");
+        taskCodeWithoutGaps.append("public class ").append(context.getClassName()).append(" {\n\n");
+        logger.info("Class declaration added.");
     }
 
     /**
@@ -79,10 +120,12 @@ public abstract class Task {
      * Ensures that each generated attribute is unique within the class.
      */
     public void createVariable() {
+        logger.info("Creating variable...");
         String attribute = context.getRandomAttribute();
         Object value = context.getRandomValueForAttribute(attribute);
 
         while (generatedAttributes.contains(attribute)) {
+            logger.warning("Duplicate attribute detected: " + attribute + ". Selecting a new one...");
             attribute = context.getRandomAttribute();
             value = context.getRandomValueForAttribute(attribute);
         }
@@ -90,21 +133,50 @@ public abstract class Task {
         String variableDeclaration = "\t" + getJavaType(value) + " " + attribute + " = " + formatValue(value) + ";";
         taskCodeWithoutGaps.append(variableDeclaration).append("\n");
         generatedAttributes.add(attribute);
+
+        logger.info("Variable added: " + variableDeclaration);
     }
 
     /**
      * Generates a getter method for a randomly selected attribute from the list
      * of generated attributes. Does nothing if no attributes are available.
+     *
+     * @return true if a getter was created, false otherwise
      */
-    public void createGetter() {
+    public boolean createGetter() {
         if (generatedAttributes.isEmpty()) {
-            return;
+            logger.warning("No attributes available to create getter.");
+            return false;
+        }
+
+        logger.info("Creating getter method...");
+
+        int currentGetters = 0;
+        for (String method : generatedMethods) {
+            if (method.contains("get")) {
+                currentGetters++;
+            }
+        }
+
+        if (currentGetters >= generatedAttributes.size()) {
+            logger.info("Current Getters: " + currentGetters + " | Attributes: " + generatedAttributes.size());
+            logger.info("All possible getters already exist. Skipping getter creation.");
+            return false;
         }
 
         Random random = new Random();
         String attribute = generatedAttributes.get(random.nextInt(generatedAttributes.size()));
+
+        int attempts = 0;
         while (generatedMethods.contains("get" + capitalize(attribute))) {
+            logger.warning("Getter for attribute already exists: " + attribute);
             attribute = generatedAttributes.get(random.nextInt(generatedAttributes.size()));
+            attempts++;
+
+            if (attempts >= generatedAttributes.size() + 25) {
+                logger.warning("Maximum attempts reached. Could not create a unique getter.");
+                return false;
+            }
         }
 
         String getter = "\n\tpublic " + getJavaType(context.getRandomValueForAttribute(attribute)) +
@@ -112,42 +184,77 @@ public abstract class Task {
         taskCodeWithoutGaps.append(getter).append("\n");
 
         generatedMethods.add("get" + capitalize(attribute));
+        logger.info("Getter added: " + getter);
+
+        return true;
     }
 
     /**
      * Generates a setter method for a randomly selected attribute from the list
      * of generated attributes. Does nothing if no attributes are available.
+     *
+     * @return true if a setter was created, false otherwise
      */
-    public void createSetter() {
+    public boolean createSetter() {
         if (generatedAttributes.isEmpty()) {
-            return;
+            logger.warning("No attributes available to create setter.");
+            return false;
+        }
+
+        int currentSetters = 0;
+        for (String method : generatedMethods) {
+            if (method.contains("set")) {
+                currentSetters++;
+            }
+        }
+
+        logger.info("Creating setter method...");
+        if (currentSetters >= generatedAttributes.size()) {
+            logger.info("Current Setters: " + currentSetters + " | Attributes: " + generatedAttributes.size());
+            logger.info("All possible setters already exist. Skipping setter creation.");
+            return false;
         }
 
         Random random = new Random();
         String attribute = generatedAttributes.get(random.nextInt(generatedAttributes.size()));
+
+        int attempts = 0;
         while (generatedMethods.contains("set" + capitalize(attribute))) {
+            logger.warning("Setter for attribute already exists: " + attribute);
             attribute = generatedAttributes.get(random.nextInt(generatedAttributes.size()));
+            attempts++;
+
+            if (attempts >= generatedAttributes.size() + 25) {
+                logger.warning("Maximum attempts reached. Could not create a unique setter.");
+                return false;
+            }
         }
 
         String setter = "\n\tpublic void set" + capitalize(attribute) +
                 "(" + getJavaType(context.getRandomValueForAttribute(attribute)) + " " + attribute + "Neu" +
-                ") {\n\t\tthis." + attribute + " = " + attribute + "Neu" +";\n\t}";
+                ") {\n\t\tthis." + attribute + " = " + attribute + "Neu" + ";\n\t}";
         taskCodeWithoutGaps.append(setter).append("\n");
 
         generatedMethods.add("set" + capitalize(attribute));
+        logger.info("Setter added: " + setter);
+
+        return true;
     }
 
     /**
      * Closes the generated class code with a closing brace.
      */
     public void closeClass() {
+        logger.info("Closing class...");
         taskCodeWithoutGaps.append("}");
+        logger.info("Class closed.");
     }
 
     /**
      * Creates gaps in the generated code by replacing selected keywords or symbols with gaps.
      */
     protected void createGapsInCode() {
+        logger.info("Creating gaps in the code...");
         Random random = new Random();
         StringBuilder code = new StringBuilder(taskCodeWithoutGaps);
         List<String> words = new ArrayList<>(Arrays.stream(code.toString().split("(?<=;)|(?=;)|(?<=\\()|(?=\\()|(?<=\\))|(?=\\))|\\s+"))
@@ -156,8 +263,7 @@ public abstract class Task {
 
         createSolutionGap(code, random);
 
-        for (int i = 0; i < gapCount-1; i++) {
-
+        for (int i = 0; i < gapCount - 1; i++) {
             int index = random.nextInt(words.size());
             String gap = words.get(index);
 
@@ -169,24 +275,27 @@ public abstract class Task {
             List<Integer> positions = findAllOccurrencesOfWords(code.toString(), gap);
 
             if (positions.isEmpty()) {
+                logger.warning("No positions found for word: " + gap);
                 i--;
                 continue;
             }
 
             int position = positions.get(random.nextInt(positions.size()));
 
-            if (position != 0 && code.charAt(position-1) == '[') {
+            if (position != 0 && code.charAt(position - 1) == '[') {
+                logger.warning("Position already contains a gap: " + gap);
                 i--;
                 continue;
             }
 
             code.replace(position, position + gap.length(), "[" + gap + "]");
-
             words.remove(index);
         }
 
         taskCodeWithGaps.setLength(0);
         taskCodeWithGaps.append(code);
+
+        logger.info("Gaps created successfully.");
     }
 
     /**
