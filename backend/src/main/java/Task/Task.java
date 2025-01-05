@@ -48,10 +48,25 @@ public abstract class Task {
         generateTaskCode();
         logger.info("Task code generated without gaps: \n" + taskCodeWithoutGaps);
 
-        createGapsInCode();
+        while (!createGapsInCode()) {
+            logger.warning("Gaps could not be created. Resetting task...");
+            resetTask();
+            generateTaskCode();
+        }
+
         logger.info("Task code with gaps: \n" + taskCodeWithGaps);
 
         logger.info("Task creation finished.");
+    }
+
+    /**
+     * Resets the task by clearing all generated code and attributes.
+     */
+    public void resetTask() {
+        taskCodeWithoutGaps.setLength(0);
+        taskCodeWithGaps.setLength(0);
+        generatedAttributes.clear();
+        generatedMethods.clear();
     }
 
     /**
@@ -252,8 +267,10 @@ public abstract class Task {
 
     /**
      * Creates gaps in the generated code by replacing selected keywords or symbols with gaps.
+     *
+     * @return true if gaps were created successfully, false otherwise
      */
-    protected void createGapsInCode() {
+    protected boolean createGapsInCode() {
         logger.info("Creating gaps in the code...");
         Random random = new Random();
         StringBuilder code = new StringBuilder(taskCodeWithoutGaps);
@@ -261,7 +278,10 @@ public abstract class Task {
                 .filter(word -> !word.isEmpty())
                 .toList());
 
-        createSolutionGap(code, random);
+        if (!createSolutionGap(code, random)) {
+            logger.warning("Solution gap could not be created.");
+            return false;
+        }
 
         for (int i = 0; i < gapCount - 1; i++) {
             int index = random.nextInt(words.size());
@@ -296,6 +316,7 @@ public abstract class Task {
         taskCodeWithGaps.append(code);
 
         logger.info("Gaps created successfully.");
+        return true;
     }
 
     /**
@@ -303,8 +324,9 @@ public abstract class Task {
      *
      * @param code   the code snippet to modify
      * @param random the random number generator
+     * @return true if a gap was created, false otherwise
      */
-    protected abstract void createSolutionGap(StringBuilder code, Random random);
+    protected abstract boolean createSolutionGap(StringBuilder code, Random random);
 
     /**
      * Determines the Java data type of the provided value.

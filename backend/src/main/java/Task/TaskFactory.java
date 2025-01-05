@@ -46,6 +46,8 @@ public class TaskFactory {
                 return new ReturnTypeRequiredErrorTask(context, gapCount);
             case "IllegalStartOfExpressionErrorTask":
                 return new IllegalStartOfExpressionErrorTask(context, gapCount);
+            case "IntConvertToStringErrorTask":
+                return new IntConvertToStringErrorTask(context, gapCount);
             default:
                 return null;
         }

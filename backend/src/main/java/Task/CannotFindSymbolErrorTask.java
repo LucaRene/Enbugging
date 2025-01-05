@@ -28,9 +28,9 @@ public class CannotFindSymbolErrorTask extends Task {
      * @param random the random number generator
      */
     @Override
-    protected void createSolutionGap(StringBuilder code, Random random) {
+    protected boolean createSolutionGap(StringBuilder code, Random random) {
         if (generatedAttributes.isEmpty()) {
-            return;
+            return false;
         }
 
         String attribute = generatedAttributes.get(random.nextInt(generatedAttributes.size()));
@@ -48,5 +48,6 @@ public class CannotFindSymbolErrorTask extends Task {
 
         int position = positions.get(random.nextInt(positions.size()));
         code.replace(position, position + attribute.length(), "[" + attribute + "]");
+        return true;
     }
 }

@@ -28,8 +28,9 @@ public class TaskService {
         possibleErrors.add("CannotFindSymbolErrorTask");
         possibleErrors.add("ReturnTypeRequiredErrorTask");
         possibleErrors.add("IllegalStartOfExpressionErrorTask");
+        possibleErrors.add("IntConvertToStringErrorTask");
 
         return TaskFactory.createTask(possibleErrors.get(random.nextInt(possibleErrors.size())), 6);
-        //return TaskFactory.createTask("IllegalStartOfExpressionErrorTask", 3);
+        //return TaskFactory.createTask("IntConvertToStringErrorTask", 3);
     }
 }

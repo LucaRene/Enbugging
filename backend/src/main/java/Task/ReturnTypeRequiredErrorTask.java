@@ -29,9 +29,9 @@ public class ReturnTypeRequiredErrorTask extends Task {
      * @param random the random number generator
      */
     @Override
-    protected void createSolutionGap(StringBuilder code, Random random) {
+    protected boolean createSolutionGap(StringBuilder code, Random random) {
         if (generatedAttributes.isEmpty()) {
-            return;
+            return false;
         }
 
         boolean returnTypeFound = false;
@@ -55,6 +55,7 @@ public class ReturnTypeRequiredErrorTask extends Task {
                 replaceReturnTypeWithGap(code, random);
             }
         }
+        return true;
     }
 
     /**

@@ -82,13 +82,14 @@ public class IllegalStartOfExpressionErrorTask extends Task {
      * @param random the random number generator
      */
     @Override
-    protected void createSolutionGap(StringBuilder code, Random random) {
+    protected boolean createSolutionGap(StringBuilder code, Random random) {
         if (generatedAttributes.isEmpty()) {
-            return;
+            return false;
         }
 
         List<Integer> positions = findAllOccurrencesOfWords(code.toString(), "}");
         int position = positions.get(0);
         code.replace(position, position + 1, "[}]");
+        return true;
     }
 }

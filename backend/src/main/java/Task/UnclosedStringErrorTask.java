@@ -17,15 +17,13 @@ public class UnclosedStringErrorTask extends Task {
      */
     public UnclosedStringErrorTask(ContextStrategy context, int gapCount) {
         super(context, gapCount);
+        expectedErrorMessage = "unclosed string literal";
 
         while (!getTaskCodeWithoutGaps().contains("String")){
-            taskCodeWithoutGaps.setLength(0);
-            taskCodeWithoutGaps.delete(0, taskCodeWithoutGaps.length());
-            generatedAttributes.clear();
+            resetTask();
             generateTaskCode();
         }
 
-        expectedErrorMessage = "unclosed string literal";
         createGapsInCode();
     }
 
@@ -36,11 +34,12 @@ public class UnclosedStringErrorTask extends Task {
      * @param random the random number generator
      */
     @Override
-    protected void createSolutionGap(StringBuilder code, Random random) {
+    protected boolean createSolutionGap(StringBuilder code, Random random) {
         List<Integer> stringPositions = findAllOccurrencesOfWords(code.toString(), "\"");
         if (stringPositions.size() >= 2) {
             int startPosition = stringPositions.get(random.nextInt(stringPositions.size()));
             code.replace(startPosition, startPosition + 1, "[\"]");
         }
+        return true;
     }
 }

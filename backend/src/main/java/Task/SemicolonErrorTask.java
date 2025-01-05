@@ -27,11 +27,12 @@ public class SemicolonErrorTask extends Task {
      * @param random the random number generator
      */
     @Override
-    protected void createSolutionGap(StringBuilder code, Random random) {
+    protected boolean createSolutionGap(StringBuilder code, Random random) {
         List<Integer> positions = findAllOccurrencesOfWords(code.toString(), ";");
         if (!positions.isEmpty()) {
             int position = positions.get(random.nextInt(positions.size()));
             code.replace(position, position + 1, "[;]");
-        }
+        } else return false;
+        return true;
     }
 }
