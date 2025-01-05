@@ -44,6 +44,8 @@ public class TaskFactory {
                 return new CannotFindSymbolErrorTask(context, gapCount);
             case "ReturnTypeRequiredErrorTask":
                 return new ReturnTypeRequiredErrorTask(context, gapCount);
+            case "IllegalStartOfExpressionErrorTask":
+                return new IllegalStartOfExpressionErrorTask(context, gapCount);
             default:
                 return null;
         }

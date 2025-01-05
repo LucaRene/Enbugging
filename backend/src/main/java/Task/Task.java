@@ -14,7 +14,7 @@ import java.util.logging.Logger;
  */
 public abstract class Task {
 
-    private static final Logger logger = Logger.getLogger(Task.class.getName());
+    protected static final Logger logger = Logger.getLogger(Task.class.getName());
 
     protected final ContextStrategy context;
 
