@@ -7,24 +7,30 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * A specialized Task that generates a Task with Gaps containing a
+ * A specialized Task that generates a Task with Gaps containing an
  * "incompatible types: int cannot be converted to java.lang.String" error.
  */
-public class StringConvertToIntErrorTask extends Task {
+public class StringConvertToIntOrDoubleErrorTask extends Task {
 
     private static final String STRING_KEYWORD = "String ";
     private static final String INVALID_STRING_KEYWORD = "(String";
 
     /**
      * Constructs a new IntConvertToStringErrorTask and ensures that the generated
-     * code contains at least one 'int' declaration to allow for gap creation.
+     * code contains at least one 'String' declaration to ensure the task is solvable.
      *
      * @param context  The context strategy for generating attributes and methods.
      * @param gapCount The number of gaps to introduce in the code.
      */
-    public StringConvertToIntErrorTask(ContextStrategy context, int gapCount) {
+    public StringConvertToIntOrDoubleErrorTask(ContextStrategy context, int gapCount) {
         super(context, gapCount);
-        expectedErrorMessage = "incompatible types: java.lang.String cannot be converted to int";
+
+        Random random = new Random();
+        if (random.nextBoolean()) {
+            expectedErrorMessage = "incompatible types: java.lang.String cannot be converted to int";
+        } else {
+            expectedErrorMessage = "incompatible types: java.lang.String cannot be converted to double";
+        }
 
         while (!getTaskCodeWithoutGaps().contains(STRING_KEYWORD)) {
             resetTask();
