@@ -29,6 +29,7 @@ public class TaskService {
         possibleErrors.add("ReturnTypeRequiredErrorTask");
         possibleErrors.add("IllegalStartOfExpressionErrorTask");
         possibleErrors.add("IntConvertToStringErrorTask");
+        possibleErrors.add("StringConvertToIntErrorTask");
 
         return TaskFactory.createTask(possibleErrors.get(random.nextInt(possibleErrors.size())), 6);
         //return TaskFactory.createTask("IntConvertToStringErrorTask", 3);
