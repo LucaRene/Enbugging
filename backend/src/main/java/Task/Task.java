@@ -56,6 +56,7 @@ public abstract class Task {
         while (!createGapsInCode()) {
             logger.warning("Gaps could not be created. Resetting task...");
             resetTask();
+            generateTaskCode();
         }
         logger.info("Task code with gaps: \n" + taskCodeWithGaps);
 
