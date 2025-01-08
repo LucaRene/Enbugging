@@ -26,7 +26,7 @@ public class IllegalStartOfExpressionErrorTask extends Task {
      * The class must contain at least one variable and two methods.
      */
     @Override
-    public void generateTaskCode() {
+    public boolean generateTaskCode() {
         logger.info("Generating task code...");
         Random random = new Random();
 
@@ -73,6 +73,7 @@ public class IllegalStartOfExpressionErrorTask extends Task {
 
         closeClass();
         logger.info("Task code generation complete.");
+        return true;
     }
 
     /**

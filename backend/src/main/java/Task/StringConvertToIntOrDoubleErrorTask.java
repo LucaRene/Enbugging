@@ -55,7 +55,6 @@ public class StringConvertToIntOrDoubleErrorTask extends Task {
             return false;
         }
 
-        // Find valid and invalid positions
         List<Integer> positions = findAllOccurrencesOfWords(code.toString(), STRING_KEYWORD);
         List<Integer> wrongPositions = adjustWrongPositions(findAllOccurrencesOfWords(code.toString(), INVALID_STRING_KEYWORD));
 

@@ -50,6 +50,8 @@ public class TaskFactory {
                 return new IntConvertToStringErrorTask(context, gapCount);
             case "StringConvertToIntOrDoubleErrorTask":
                 return new StringConvertToIntOrDoubleErrorTask(context, gapCount);
+            case "VariableAlreadyDefinedErrorTask":
+                return new VariableAlreadyDefinedErrorTask(context, gapCount);
             default:
                 return null;
         }

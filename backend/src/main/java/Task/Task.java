@@ -45,15 +45,18 @@ public abstract class Task {
         logger.info("Context: " + context.getClassName());
         logger.info("Gap count: " + gapCount);
 
-        generateTaskCode();
+        while (!generateTaskCode()) {
+            logger.warning("Task generation failed. Resetting task...");
+            resetTask();
+        }
         logger.info("Task code generated without gaps: \n" + taskCodeWithoutGaps);
+
+        setExpectedErrorMessage();
 
         while (!createGapsInCode()) {
             logger.warning("Gaps could not be created. Resetting task...");
             resetTask();
-            generateTaskCode();
         }
-
         logger.info("Task code with gaps: \n" + taskCodeWithGaps);
 
         logger.info("Task creation finished.");
@@ -72,7 +75,7 @@ public abstract class Task {
     /**
      * Generates a random class with variables, getter and setter methods, based on context attributes.
      */
-    public void generateTaskCode() {
+    public boolean generateTaskCode() {
         logger.info("Generating task code...");
         Random random = new Random();
 
@@ -119,6 +122,7 @@ public abstract class Task {
 
         closeClass();
         logger.info("Task code generation complete.");
+        return true;
     }
 
     /**
@@ -317,6 +321,15 @@ public abstract class Task {
 
         logger.info("Gaps created successfully.");
         return true;
+    }
+
+    /**
+     * Sets the expected error message for this task.
+     */
+    protected void setExpectedErrorMessage() {
+        logger.info("Setting expected error message...");
+        expectedErrorMessage = "Error message not set.";
+        logger.info("Expected error message set: " + expectedErrorMessage);
     }
 
     /**
