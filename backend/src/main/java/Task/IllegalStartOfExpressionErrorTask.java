@@ -22,23 +22,13 @@ public class IllegalStartOfExpressionErrorTask extends Task {
     }
 
     /**
-     * Generates a ransom class with the specified context and gap count.
+     * Generates a random class with the specified context and gap count.
      * The class must contain at least one variable and two methods.
      */
     @Override
-    public boolean generateTaskCode() {
-        logger.info("Generating task code...");
+    public boolean generateMethods(int methodCount) {
         Random random = new Random();
-
-        createClassDeclaration();
-
-        int variableCount = random.nextInt(3) + 1;
-        logger.info("Number of variables to generate: " + variableCount);
-        for (int i = 0; i < variableCount; i++) {
-            createVariable();
-        }
-
-        int methodCount = 2;
+        methodCount = 2;
         logger.info("Number of methods to generate: " + methodCount);
 
         boolean getterProhibited = false;
@@ -70,9 +60,6 @@ public class IllegalStartOfExpressionErrorTask extends Task {
                 }
             }
         }
-
-        closeClass();
-        logger.info("Task code generation complete.");
         return true;
     }
 

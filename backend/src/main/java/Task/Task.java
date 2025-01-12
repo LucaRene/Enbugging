@@ -83,14 +83,50 @@ public abstract class Task {
         createClassDeclaration();
 
         int variableCount = random.nextInt(3) + 1;
+        if (createVariables(variableCount)) {
+            logger.info("Variables generated successfully.");
+        } else {
+            logger.warning("Variable generation failed.");
+            return false;
+        }
+
+        int methodCount = random.nextInt(2) + 1;
+        if (generateMethods(methodCount)) {
+            logger.info("Methods generated successfully.");
+        } else {
+            logger.warning("Method generation failed.");
+            return false;
+        }
+
+        closeClass();
+        logger.info("Task code generation complete.");
+        return true;
+    }
+
+    /**
+     * Generates a random number of variables for the class.
+     *
+     * @param variableCount the number of variables to generate
+     * @return true if variables were created successfully, false otherwise
+     */
+    public boolean createVariables(int variableCount) {
         logger.info("Number of variables to generate: " + variableCount);
         for (int i = 0; i < variableCount; i++) {
             createVariable();
         }
+        return true;
+    }
 
-        int methodCount = random.nextInt(2) + 1;
+    /**
+     * Generates a random number of methods for the class.
+     *
+     * @param methodCount the number of methods to generate
+     * @return true if methods were created successfully, false otherwise
+     */
+    public boolean generateMethods(int methodCount){
         logger.info("Number of methods to generate: " + methodCount);
 
+        Random random = new Random();
         boolean getterProhibited = false;
         boolean setterProhibited = false;
         for (int i = 0; i < methodCount; i++) {
@@ -120,9 +156,6 @@ public abstract class Task {
                 }
             }
         }
-
-        closeClass();
-        logger.info("Task code generation complete.");
         return true;
     }
 

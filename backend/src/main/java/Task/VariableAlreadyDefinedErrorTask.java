@@ -26,57 +26,13 @@ public class VariableAlreadyDefinedErrorTask extends Task {
      * @return true if the task code was generated successfully, false otherwise.
      */
     @Override
-    public boolean generateTaskCode() {
-        logger.info("Generating task code...");
-        Random random = new Random();
-
-        createClassDeclaration();
-
-        int variableCount = 2;
+    public boolean createVariables(int variableCount) {
+        variableCount = 2;
         logger.info("Number of variables to generate: " + variableCount);
         createVariable();
         createVariable();
 
-        if (!checkForSameTypes(this.generatedAttributes.get(0), this.generatedAttributes.get(1))) {
-            return false;
-        }
-
-        int methodCount = random.nextInt(2) + 1;
-        logger.info("Number of methods to generate: " + methodCount);
-
-        boolean getterProhibited = false;
-        boolean setterProhibited = false;
-        for (int i = 0; i < methodCount; i++) {
-            if (getterProhibited && setterProhibited) {
-                break;
-            } else if (getterProhibited) {
-                setterProhibited = !createSetter();
-                if (setterProhibited) {
-                    i--;
-                }
-            } else if (setterProhibited) {
-                getterProhibited = !createGetter();
-                if (getterProhibited) {
-                    i--;
-                }
-            } else {
-                if (random.nextBoolean()) {
-                    getterProhibited = !createGetter();
-                    if (getterProhibited) {
-                        i--;
-                    }
-                } else {
-                    setterProhibited = !createSetter();
-                    if (setterProhibited) {
-                        i--;
-                    }
-                }
-            }
-        }
-
-        closeClass();
-        logger.info("Task code generated successfully.");
-        return true;
+        return checkForSameTypes(this.generatedAttributes.get(0), this.generatedAttributes.get(1));
     }
 
     /**
