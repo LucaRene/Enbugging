@@ -47,7 +47,7 @@ public class CannotFindSymbolErrorTask extends Task {
         }
 
         int position = positions.get(random.nextInt(positions.size()));
-        code.replace(position, position + attribute.length(), "[" + attribute + "]");
+        code.replace(position, position + attribute.length(), "[[" + attribute + "]]");
         return true;
     }
 }

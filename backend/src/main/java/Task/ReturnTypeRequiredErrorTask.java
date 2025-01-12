@@ -67,7 +67,7 @@ public class ReturnTypeRequiredErrorTask extends Task {
     public void replaceVoidWithGap(StringBuilder code, Random random) {
         List<Integer> positions = findAllOccurrencesOfWords(code.toString(), "void");
         int position = positions.get(random.nextInt(positions.size()));
-        code.replace(position, position + "void".length(), "[void]");
+        code.replace(position, position + "void".length(), "[[void]]");
     }
 
     /**
@@ -86,6 +86,6 @@ public class ReturnTypeRequiredErrorTask extends Task {
 
         List<Integer> positions = findAllOccurrencesOfWords(code.toString(), returnType + " get" + capitalize(attribute));
         int position = positions.get(random.nextInt(positions.size()));
-        code.replace(position, position + returnType.length(), "[" + returnType + "]");
+        code.replace(position, position + returnType.length(), "[[" + returnType + "]]");
     }
 }

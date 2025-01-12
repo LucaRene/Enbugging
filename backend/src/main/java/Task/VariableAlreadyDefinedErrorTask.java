@@ -88,7 +88,7 @@ public class VariableAlreadyDefinedErrorTask extends Task {
         }
 
         int position = positions.get(0);
-        code.replace(position, position + toReplace.length(), "[" + toReplace + "]");
+        code.replace(position, position + toReplace.length(), "[[" + toReplace + "]]");
         logger.info("Solution gap created at position: " + position);
         return true;
     }

@@ -61,7 +61,7 @@ public class IntConvertToStringErrorTask extends Task {
         }
 
         int position = positions.get(random.nextInt(positions.size()));
-        code.replace(position, position + 3, "[int]");
+        code.replace(position, position + 3, "[[int]]");
         logger.info("Solution gap created at position: " + position);
         return true;
     }

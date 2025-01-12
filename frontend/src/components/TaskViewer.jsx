@@ -16,8 +16,8 @@ const TaskViewer = ({ taskCode, errorMessage, fetchNewTask, isLoading }) => {
     const [isTaskComplete, setIsTaskComplete] = useState(false);
     const [isDisabled, setIsDisabled] = useState(false);
 
-    const originalValues = taskCode.split(/(\[.*?\])/).map((part) =>
-        part.startsWith("[") && part.endsWith("]") ? part.slice(1, -1) : null
+    const originalValues = taskCode.split(/(\[\[.*?\]\])/).map((part) =>
+        part.startsWith("[[") && part.endsWith("]]") ? part.slice(2, -2) : null
     );
 
 
@@ -82,13 +82,13 @@ const TaskViewer = ({ taskCode, errorMessage, fetchNewTask, isLoading }) => {
      * Sends the user's code to the server for validation and displays the response.
      */
     const validateCode = async () => {
-        const parts = taskCode.split(/(\[.*?\])/);
+        const parts = taskCode.split(/(\[\[.*?\]\])/);
         const userCode = parts
             .map((part, index) =>
-                part.startsWith("[") && part.endsWith("]")
+                part.startsWith("[[") && part.endsWith("]]")
                     ? editableValues[index] !== undefined
                         ? editableValues[index]
-                        : part.slice(1, -1)
+                        : part.slice(2, -2)
                     : part
             )
             .join("");
@@ -125,10 +125,10 @@ const TaskViewer = ({ taskCode, errorMessage, fetchNewTask, isLoading }) => {
      * @returns {JSX.Element[]} The rendered code with editable inputs.
      */
     const renderCodeWithInputs = () => {
-        const parts = taskCode.split(/(\[.*?\])/);
+        const parts = taskCode.split(/(\[\[.*?\]\])/);
         return parts.map((part, index) => {
-            if (part.startsWith("[") && part.endsWith("]")) {
-                const cleanPart = part.slice(1, -1);
+            if (part.startsWith("[[") && part.endsWith("]]")) {
+                const cleanPart = part.slice(2, -2);
                 return (
                     <input
                         key={index}

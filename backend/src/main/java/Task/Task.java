@@ -90,6 +90,9 @@ public abstract class Task {
             return false;
         }
 
+        createMainMethod();
+        generateConstructor();
+
         int methodCount = random.nextInt(2) + 1;
         if (generateMethods(methodCount)) {
             logger.info("Methods generated successfully.");
@@ -295,6 +298,59 @@ public abstract class Task {
     }
 
     /**
+     * Generates a constructor for the class.
+     *
+     * @return true if the constructor was created, false otherwise
+     */
+    public boolean generateConstructor() {
+        logger.info("Generating constructor...");
+
+        StringBuilder parameter = new StringBuilder();
+        for (String attribute : generatedAttributes) {
+            parameter.append(getJavaType(context.getRandomValueForAttribute(attribute)))
+                    .append(" ").append(attribute).append(", ");
+        }
+        parameter.setLength(parameter.length() - 2);
+
+        taskCodeWithoutGaps.append("\n\tpublic ").append(context.getClassName())
+                .append("(" + parameter.toString() + ") {\n");
+        for (String attribute : generatedAttributes) {
+            taskCodeWithoutGaps.append("\t\tthis.").append(attribute).append(" = ").append(attribute).append(";\n");
+        }
+
+        taskCodeWithoutGaps.append("\t}\n");
+        logger.info("Constructor generated.");
+        return true;
+    }
+
+    /**
+     * Creates the main method for the class.
+     *
+     * @return true if the main method was created, false otherwise
+     */
+    public boolean createMainMethod() {
+        logger.info("Creating main method...");
+        taskCodeWithoutGaps.append("\n\tpublic static void main(String[] args) {\n");
+
+        StringBuilder values = new StringBuilder();
+        for (String attribute : generatedAttributes) {
+            String type = getJavaType(context.getRandomValueForAttribute(attribute));
+            if (type.equals("String")) {
+                values.append("\"").append(context.getRandomValueForAttribute(attribute)).append("\", ");
+            } else {
+                values.append(context.getRandomValueForAttribute(attribute)).append(", ");
+            }
+        }
+        values.setLength(values.length() - 2);
+
+        taskCodeWithoutGaps.append("\t\t").append(context.getClassName()).append(" obj = new ")
+                .append(context.getClassName()).append("(").append(values).append(");\n");
+        taskCodeWithoutGaps.append("\t}\n");
+        logger.info("Main method created.");
+        return true;
+    }
+
+    /**
      * Closes the generated class code with a closing brace.
      */
     public void closeClass() {
@@ -312,7 +368,8 @@ public abstract class Task {
         logger.info("Creating gaps in the code...");
         Random random = new Random();
         StringBuilder code = new StringBuilder(taskCodeWithoutGaps);
-        List<String> words = new ArrayList<>(Arrays.stream(code.toString().split("(?<=;)|(?=;)|(?<=\\()|(?=\\()|(?<=\\))|(?=\\))|\\s+"))
+        List<String> words = new ArrayList<>(Arrays.stream(code.toString()
+                        .split("(?<=;)|(?=;)|(?<=\\()|(?=\\()|(?<=\\))|(?=\\))|\\s+"))
                 .filter(word -> !word.isEmpty())
                 .toList());
 
@@ -346,7 +403,7 @@ public abstract class Task {
                 continue;
             }
 
-            code.replace(position, position + gap.length(), "[" + gap + "]");
+            code.replace(position, position + gap.length(), "[[" + gap + "]]");
             words.remove(index);
         }
 

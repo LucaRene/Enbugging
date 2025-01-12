@@ -31,7 +31,7 @@ public class ReachedEndOfFileErrorTask extends Task {
         List<Integer> positions = findAllOccurrencesOfWords(code.toString(), "}");
         if (!positions.isEmpty()) {
             int position = positions.get(positions.size()-1);
-            code.replace(position, position + 1, "[}]");
+            code.replace(position, position + 1, "[[}]]");
         }
         return true;
     }

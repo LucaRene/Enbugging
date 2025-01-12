@@ -77,7 +77,7 @@ public class IllegalStartOfExpressionErrorTask extends Task {
 
         List<Integer> positions = findAllOccurrencesOfWords(code.toString(), "}");
         int position = positions.get(0);
-        code.replace(position, position + 1, "[}]");
+        code.replace(position, position + 1, "[[}]]");
         return true;
     }
 }

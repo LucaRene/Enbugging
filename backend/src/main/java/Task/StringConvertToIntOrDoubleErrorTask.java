@@ -66,7 +66,7 @@ public class StringConvertToIntOrDoubleErrorTask extends Task {
         }
 
         int position = positions.get(random.nextInt(positions.size()));
-        code.replace(position, position + STRING_KEYWORD.length() - 1, "[" + STRING_KEYWORD.trim() + "]");
+        code.replace(position, position + STRING_KEYWORD.length() - 1, "[[" + STRING_KEYWORD.trim() + "]]");
         logger.info("Solution gap created at position: " + position);
         return true;
     }
