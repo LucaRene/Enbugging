@@ -19,7 +19,7 @@ public class ReturnTypeRequiredErrorTask extends Task {
      */
     public ReturnTypeRequiredErrorTask(ContextStrategy context, int gapCount) {
         super(context, gapCount);
-        expectedErrorMessage = "invalid method declaration;\nreturn type required";
+        expectedErrorMessage = "invalid method declaration; \nreturn type required";
     }
 
     /**

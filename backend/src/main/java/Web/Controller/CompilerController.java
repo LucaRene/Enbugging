@@ -40,10 +40,15 @@ public class CompilerController {
             ));
         }
 
+
+
         List<String> errors = codeCompiler.compile(code);
         String actualError = errors.isEmpty() ? "No errors" : errors.get(0);
 
-        boolean isCorrect = actualError.contains(expectedError);
+        String normalizedExpectedError = expectedError.replace("\n", "").trim();
+        String normalizedActualError = actualError.replace("\n", "").trim();
+
+        boolean isCorrect = normalizedActualError.contains(normalizedExpectedError);
 
         return ResponseEntity.ok(Map.of(
                 "status", isCorrect ? "success" : "error",
