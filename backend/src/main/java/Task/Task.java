@@ -90,9 +90,6 @@ public abstract class Task {
             return false;
         }
 
-        createMainMethod();
-        generateConstructor();
-
         int methodCount = random.nextInt(2) + 1;
         if (generateMethods(methodCount)) {
             logger.info("Methods generated successfully.");

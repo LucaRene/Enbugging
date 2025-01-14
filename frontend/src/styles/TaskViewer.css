@@ -12,6 +12,7 @@ body {
     color: #00bcd4 !important;
     font-weight: bold;
     text-align: center;
+    white-space: pre-wrap;
 }
 
 .container {

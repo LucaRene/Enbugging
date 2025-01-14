@@ -27,9 +27,9 @@ public class StringConvertToIntOrDoubleErrorTask extends Task {
 
         Random random = new Random();
         if (random.nextBoolean()) {
-            expectedErrorMessage = "incompatible types: java.lang.String cannot be converted to int";
+            expectedErrorMessage = "incompatible types: \njava.lang.String cannot be converted to int";
         } else {
-            expectedErrorMessage = "incompatible types: java.lang.String cannot be converted to double";
+            expectedErrorMessage = "incompatible types: \njava.lang.String cannot be converted to double";
         }
 
         while (!getTaskCodeWithoutGaps().contains(STRING_KEYWORD)) {
