@@ -98,6 +98,9 @@ public abstract class Task {
             return false;
         }
 
+        generateConstructor();
+        createMainMethod();
+
         closeClass();
         logger.info("Task code generation complete.");
         return true;

@@ -54,6 +54,8 @@ public class TaskFactory {
                 return new VariableAlreadyDefinedErrorTask(context, gapCount);
             case "IdentifierExpectedErrorTask":
                 return new IdentifierExpectedErrorTask(context, gapCount);
+            case "MissingReturnValueErrorTask":
+                return new MissingReturnValueErrorTask(context, gapCount);
             default:
                 return null;
         }

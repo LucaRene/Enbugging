@@ -32,6 +32,7 @@ public class TaskService {
         possibleErrors.add("StringConvertToIntOrDoubleErrorTask");
         possibleErrors.add("VariableAlreadyDefinedErrorTask");
         possibleErrors.add("IdentifierExpectedErrorTask");
+        possibleErrors.add("MissingReturnValueErrorTask");
 
         return TaskFactory.createTask(possibleErrors.get(random.nextInt(possibleErrors.size())), 6);
     }
