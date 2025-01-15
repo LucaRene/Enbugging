@@ -56,6 +56,8 @@ public class TaskFactory {
                 return new IdentifierExpectedErrorTask(context, gapCount);
             case "MissingReturnValueErrorTask":
                 return new MissingReturnValueErrorTask(context, gapCount);
+            case "MissingReturnStatementErrorTask":
+                return new MissingReturnStatementErrorTask(context, gapCount);
             default:
                 return null;
         }
