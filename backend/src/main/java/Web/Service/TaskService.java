@@ -31,8 +31,8 @@ public class TaskService {
         possibleErrors.add("IntConvertToStringErrorTask");
         possibleErrors.add("StringConvertToIntOrDoubleErrorTask");
         possibleErrors.add("VariableAlreadyDefinedErrorTask");
+        possibleErrors.add("IdentifierExpectedErrorTask");
 
         return TaskFactory.createTask(possibleErrors.get(random.nextInt(possibleErrors.size())), 6);
-        //return TaskFactory.createTask("VariableAlreadyDefinedErrorTask", 3);
     }
 }
