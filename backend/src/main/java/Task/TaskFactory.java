@@ -58,6 +58,8 @@ public class TaskFactory {
                 return new MissingReturnValueErrorTask(context, gapCount);
             case "MissingReturnStatementErrorTask":
                 return new MissingReturnStatementErrorTask(context, gapCount);
+            case "ConstructorArgumentMismatchErrorTask":
+                return new ConstructorArgumentMismatchErrorTask(context, gapCount);
             default:
                 return null;
         }

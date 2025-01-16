@@ -45,8 +45,8 @@ public class CompilerController {
         List<String> errors = codeCompiler.compile(code);
         String actualError = errors.isEmpty() ? "No errors" : errors.get(0);
 
-        String normalizedExpectedError = expectedError.replace("\n", "").trim();
-        String normalizedActualError = actualError.replace("\n", "").trim();
+        String normalizedExpectedError = normalizeErrorMessage(expectedError);
+        String normalizedActualError = normalizeErrorMessage(actualError);
 
         boolean isCorrect = normalizedActualError.contains(normalizedExpectedError);
 
@@ -58,4 +58,20 @@ public class CompilerController {
                         : "Leider falsch! ❌ \n Versuche es gleich nochmal!"
         ));
     }
+
+    /**
+     * Normalizes the error message by removing unnecessary whitespace and line breaks.
+     */
+    private String normalizeErrorMessage(String errorMessage) {
+        if (errorMessage == null) {
+            return "";
+        }
+        return errorMessage
+                .replaceAll("\\s+", "")
+                .replace("\n", "")
+                .replace("\r", "")
+                .replace("\t", "")
+                .trim();
+    }
+
 }

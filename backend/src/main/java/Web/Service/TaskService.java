@@ -34,7 +34,8 @@ public class TaskService {
         possibleErrors.add("IdentifierExpectedErrorTask");
         possibleErrors.add("MissingReturnValueErrorTask");
         possibleErrors.add("MissingReturnStatementErrorTask");
+        possibleErrors.add("ConstructorArgumentMismatchErrorTask");
 
-        return TaskFactory.createTask(possibleErrors.get(random.nextInt(possibleErrors.size())), 6);
+        return TaskFactory.createTask(possibleErrors.get(random.nextInt(possibleErrors.size())), 12);
     }
 }

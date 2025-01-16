@@ -98,9 +98,6 @@ public abstract class Task {
             return false;
         }
 
-        generateConstructor();
-        createMainMethod();
-
         closeClass();
         logger.info("Task code generation complete.");
         return true;
@@ -167,7 +164,7 @@ public abstract class Task {
      */
     public void createClassDeclaration() {
         logger.info("Creating class declaration...");
-        taskCodeWithoutGaps.append("public class ").append(context.getClassName()).append(" {\n\n");
+        taskCodeWithoutGaps.append("class ").append(context.getClassName()).append(" {\n\n");
         logger.info("Class declaration added.");
     }
 
@@ -235,7 +232,7 @@ public abstract class Task {
             }
         }
 
-        String getter = "\n\tpublic " + getJavaType(context.getRandomValueForAttribute(attribute)) +
+        String getter = "\n\t" + getJavaType(context.getRandomValueForAttribute(attribute)) +
                 " get" + capitalize(attribute) + "() {\n\t\treturn " + attribute + ";\n\t}";
         taskCodeWithoutGaps.append(getter).append("\n");
 
@@ -286,7 +283,7 @@ public abstract class Task {
             }
         }
 
-        String setter = "\n\tpublic void set" + capitalize(attribute) +
+        String setter = "\n\tvoid set" + capitalize(attribute) +
                 "(" + getJavaType(context.getRandomValueForAttribute(attribute)) + " " + attribute + "Neu" +
                 ") {\n\t\tthis." + attribute + " = " + attribute + "Neu" + ";\n\t}";
         taskCodeWithoutGaps.append(setter).append("\n");
@@ -312,8 +309,8 @@ public abstract class Task {
         }
         parameter.setLength(parameter.length() - 2);
 
-        taskCodeWithoutGaps.append("\n\tpublic ").append(context.getClassName())
-                .append("(" + parameter.toString() + ") {\n");
+        taskCodeWithoutGaps.append("\n\t").append(context.getClassName())
+                .append("(").append(parameter.toString()).append(") {\n");
         for (String attribute : generatedAttributes) {
             taskCodeWithoutGaps.append("\t\tthis.").append(attribute).append(" = ").append(attribute).append(";\n");
         }
@@ -330,7 +327,7 @@ public abstract class Task {
      */
     public boolean createMainMethod() {
         logger.info("Creating main method...");
-        taskCodeWithoutGaps.append("\n\tpublic static void main(String[] args) {\n");
+        taskCodeWithoutGaps.append("\n\tstatic void main(String[] args) {\n");
 
         StringBuilder values = new StringBuilder();
         for (String attribute : generatedAttributes) {
@@ -369,7 +366,7 @@ public abstract class Task {
         Random random = new Random();
         StringBuilder code = new StringBuilder(taskCodeWithoutGaps);
         List<String> words = new ArrayList<>(Arrays.stream(code.toString()
-                        .split("(?<=;)|(?=;)|(?<=\\()|(?=\\()|(?<=\\))|(?=\\))|\\s+"))
+                        .split("(?<=;)|(?=;)|(?<=\\()|(?=\\()|(?<=\\))|(?=\\))|(?<=\\{)|(?=\\{)|(?<=\\})|(?=\\})|\\s+"))
                 .filter(word -> !word.isEmpty())
                 .toList());
 
@@ -397,8 +394,15 @@ public abstract class Task {
 
             int position = positions.get(random.nextInt(positions.size()));
 
-            if (position != 0 && code.charAt(position - 1) == '[') {
+            if (code.substring(Math.max(0, position - 2), Math.min(code.length(), position + gap.length() + 2)).contains("[[")) {
                 logger.warning("Position already contains a gap: " + gap);
+                i--;
+                continue;
+            }
+
+            if ((gap.equals("{") || gap.equals("}")) &&
+                    (code.substring(Math.max(0, position - 2), Math.min(code.length(), position + gap.length() + 2)).contains("[["))) {
+                logger.warning("Skipping duplicate gap for { or }");
                 i--;
                 continue;
             }
