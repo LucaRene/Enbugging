@@ -40,17 +40,38 @@ public class CompilerController {
             ));
         }
 
+
+
         List<String> errors = codeCompiler.compile(code);
         String actualError = errors.isEmpty() ? "No errors" : errors.get(0);
 
-        boolean isCorrect = actualError.contains(expectedError);
+        String normalizedExpectedError = normalizeErrorMessage(expectedError);
+        String normalizedActualError = normalizeErrorMessage(actualError);
+
+        boolean isCorrect = normalizedActualError.contains(normalizedExpectedError);
 
         return ResponseEntity.ok(Map.of(
                 "status", isCorrect ? "success" : "error",
                 "expectedError", expectedError,
                 "actualError", actualError,
-                "evaluation", isCorrect ? "Richtig! ✅ \n Gut gelöst! \n Gehe weiter zur nächsten Aufgabe!"
+                "evaluation", isCorrect ? "Richtig! ✅ Gut gelöst! \n Gehe weiter zur nächsten Aufgabe!"
                         : "Leider falsch! ❌ \n Versuche es gleich nochmal!"
         ));
     }
+
+    /**
+     * Normalizes the error message by removing unnecessary whitespace and line breaks.
+     */
+    private String normalizeErrorMessage(String errorMessage) {
+        if (errorMessage == null) {
+            return "";
+        }
+        return errorMessage
+                .replaceAll("\\s+", "")
+                .replace("\n", "")
+                .replace("\r", "")
+                .replace("\t", "")
+                .trim();
+    }
+
 }

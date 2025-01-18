@@ -20,7 +20,7 @@ public class VehicleContext extends ContextStrategy {
         attributeValueMap.put("tankfuellstand", Arrays.asList(0, 25, 50, 75, 100));
         attributeValueMap.put("kilometerstand", Arrays.asList(0, 10000, 20000, 50000, 100000, 150000, 200000));
         attributeValueMap.put("marke", Arrays.asList("Audi", "BMW", "Mercedes", "Volkswagen", "Toyota", "Ford", "Tesla"));
-        attributeValueMap.put("modell", Arrays.asList("A4", "3er", "S-Klasse", "Golf", "Corolla", "Mustang", "Model S"));
+        attributeValueMap.put("modell", Arrays.asList("A4", "i3", "S-Klasse", "Golf", "Corolla", "Mustang", "Model S"));
         attributeValueMap.put("typ", Arrays.asList("Limousine", "SUV", "Cabrio", "Kombi", "Pickup", "Van", "Motorrad"));
         attributeValueMap.put("baujahr", Arrays.asList(2000, 2005, 2010, 2015, 2020, 2022));
         attributeValueMap.put("farbe", Arrays.asList("Rot", "Blau", "Schwarz", "Weiß", "Silber", "Grün", "Gelb"));

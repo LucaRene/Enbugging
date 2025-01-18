@@ -18,7 +18,6 @@ public class ReachedEndOfFileErrorTask extends Task {
     public ReachedEndOfFileErrorTask(ContextStrategy context, int gapCount) {
         super(context, gapCount);
         expectedErrorMessage = "reached end of file while parsing";
-        createGapsInCode();
     }
 
     /**
@@ -28,11 +27,12 @@ public class ReachedEndOfFileErrorTask extends Task {
      * @param random the random number generator
      */
     @Override
-    protected void createSolutionGap(StringBuilder code, Random random) {
+    protected boolean createSolutionGap(StringBuilder code, Random random) {
         List<Integer> positions = findAllOccurrencesOfWords(code.toString(), "}");
         if (!positions.isEmpty()) {
             int position = positions.get(positions.size()-1);
-            code.replace(position, position + 1, "[}]");
+            code.replace(position, position + 1, "[[}]]");
         }
+        return true;
     }
 }

@@ -25,7 +25,17 @@ public class TaskService {
         possibleErrors.add("SemicolonErrorTask");
         possibleErrors.add("UnclosedStringErrorTask");
         possibleErrors.add("ReachedEndOfFileErrorTask");
+        possibleErrors.add("CannotFindSymbolErrorTask");
+        possibleErrors.add("ReturnTypeRequiredErrorTask");
+        possibleErrors.add("IllegalStartOfExpressionErrorTask");
+        possibleErrors.add("IntConvertToStringErrorTask");
+        possibleErrors.add("StringConvertToIntOrDoubleErrorTask");
+        possibleErrors.add("VariableAlreadyDefinedErrorTask");
+        possibleErrors.add("IdentifierExpectedErrorTask");
+        possibleErrors.add("MissingReturnValueErrorTask");
+        possibleErrors.add("MissingReturnStatementErrorTask");
+        possibleErrors.add("ConstructorArgumentMismatchErrorTask");
 
-        return TaskFactory.createTask(possibleErrors.get(random.nextInt(possibleErrors.size())), 6);
+        return TaskFactory.createTask(possibleErrors.get(random.nextInt(possibleErrors.size())), 12);
     }
 }

@@ -5,7 +5,7 @@ import "../styles/TaskViewer.css";
  * TaskViewer Component
  * Displays the task description, the editable code, and actions to validate or reset the task.
  */
-const TaskViewer = ({ taskCode, errorMessage, fetchNewTask }) => {
+const TaskViewer = ({ taskCode, errorMessage, fetchNewTask, isLoading }) => {
     const [editableValues, setEditableValues] = useState({});
     const [activeIndex, setActiveIndex] = useState(null);
     const [feedbackMessage, setFeedbackMessage] = useState("");
@@ -16,8 +16,8 @@ const TaskViewer = ({ taskCode, errorMessage, fetchNewTask }) => {
     const [isTaskComplete, setIsTaskComplete] = useState(false);
     const [isDisabled, setIsDisabled] = useState(false);
 
-    const originalValues = taskCode.split(/(\[.*?\])/).map((part) =>
-        part.startsWith("[") && part.endsWith("]") ? part.slice(1, -1) : null
+    const originalValues = taskCode.split(/(\[\[.*?\]\])/).map((part) =>
+        part.startsWith("[[") && part.endsWith("]]") ? part.slice(2, -2) : null
     );
 
 
@@ -82,13 +82,13 @@ const TaskViewer = ({ taskCode, errorMessage, fetchNewTask }) => {
      * Sends the user's code to the server for validation and displays the response.
      */
     const validateCode = async () => {
-        const parts = taskCode.split(/(\[.*?\])/);
+        const parts = taskCode.split(/(\[\[.*?\]\])/);
         const userCode = parts
             .map((part, index) =>
-                part.startsWith("[") && part.endsWith("]")
+                part.startsWith("[[") && part.endsWith("]]")
                     ? editableValues[index] !== undefined
                         ? editableValues[index]
-                        : part.slice(1, -1)
+                        : part.slice(2, -2)
                     : part
             )
             .join("");
@@ -125,10 +125,10 @@ const TaskViewer = ({ taskCode, errorMessage, fetchNewTask }) => {
      * @returns {JSX.Element[]} The rendered code with editable inputs.
      */
     const renderCodeWithInputs = () => {
-        const parts = taskCode.split(/(\[.*?\])/);
+        const parts = taskCode.split(/(\[\[.*?\]\])/);
         return parts.map((part, index) => {
-            if (part.startsWith("[") && part.endsWith("]")) {
-                const cleanPart = part.slice(1, -1);
+            if (part.startsWith("[[") && part.endsWith("]]")) {
+                const cleanPart = part.slice(2, -2);
                 return (
                     <input
                         key={index}
@@ -178,24 +178,30 @@ const TaskViewer = ({ taskCode, errorMessage, fetchNewTask }) => {
                         <pre>{expectedError}</pre>
                         <p><strong>Tatsächlicher Output des Compilers:</strong></p>
                         <pre>{actualError}</pre>
-                        <p><strong>Auswertung:</strong> </p>
+                        <p><strong>Auswertung:</strong></p>
                         <pre> {evaluation} </pre>
                     </div>
                 )}
             </div>
 
             <div className="actions">
-                <button onClick={validateCode} className="validate-button">
+                <button onClick={validateCode} className="validate-button" disabled={isLoading}>
                     Aufgabe prüfen
                 </button>
-                <button onClick={resetTask} className="reset-button">
+                <button onClick={resetTask} className="reset-button" disabled={isLoading}>
                     Zurücksetzen
                 </button>
                 {showEvaluation && isTaskComplete && (
-                    <button onClick={() => {
-                        resetTask();
-                        fetchNewTask();
-                    }} className="next-task-button"> Nächste Aufgabe</button>
+                    <button
+                        onClick={() => {
+                            resetTask();
+                            fetchNewTask();
+                        }}
+                        className="next-task-button"
+                        disabled={isLoading}
+                    >
+                        {isLoading ? "Lädt..." : "Nächste Aufgabe"}
+                    </button>
                 )}
                 {feedbackMessage && <p className="feedback">{feedbackMessage}</p>}
             </div>
