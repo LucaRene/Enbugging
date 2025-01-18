@@ -129,7 +129,8 @@ body {
 .validate-button,
 .reset-button,
 .next-task-button,
-.hint-button {
+.hint-button,
+.solution-button {
     font-weight: normal;
     font-size: 1rem;
     border-radius: 5px;
@@ -176,6 +177,15 @@ body {
     background-color: #e68a00;
 }
 
+.solution-button {
+    background-color: #17a2b8;
+    color: white;
+}
+
+.solution-button:hover {
+    background-color: #138496;
+}
+
 .feedback {
     margin-top: 10px;
     font-size: 1.2rem;
@@ -184,7 +194,8 @@ body {
     white-space: pre-wrap;
 }
 
-.hint-modal {
+.hint-modal,
+.solution-modal {
     position: fixed;
     top: 0;
     left: 0;
@@ -197,7 +208,8 @@ body {
     z-index: 1000;
 }
 
-.hint-modal-content {
+.hint-modal-content,
+.solution-modal-content{
     background-color: #2e2e2e;
     color: white;
     padding: 20px;

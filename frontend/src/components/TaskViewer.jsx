@@ -17,6 +17,8 @@ const TaskViewer = ({ taskCode, errorMessage, hint, solution, fetchNewTask, isLo
     const [isDisabled, setIsDisabled] = useState(false);
     const [showHint, setShowHint] = useState(false);
     const [showSolution, setShowSolution] = useState(false);
+    const [resetCount, setResetCount] = useState(0);
+
 
     const originalValues = taskCode.split(/(\[\[.*?\]\])/).map((part) =>
         part.startsWith("[[") && part.endsWith("]]") ? part.slice(2, -2) : null
@@ -84,7 +86,9 @@ const TaskViewer = ({ taskCode, errorMessage, hint, solution, fetchNewTask, isLo
         setShowEvaluation(false);
         setIsTaskComplete(false);
         setIsDisabled(false);
+        setResetCount((prevCount) => prevCount + 1);
     };
+
 
     /**
      * Sends the user's code to the server for validation and displays the response.
@@ -194,14 +198,19 @@ const TaskViewer = ({ taskCode, errorMessage, hint, solution, fetchNewTask, isLo
 
             <div className="actions">
                 <button onClick={validateCode} className="validate-button" disabled={isLoading}>
-                    Aufgabe prüfen
+                    Compile
                 </button>
                 <button onClick={resetTask} className="reset-button" disabled={isLoading}>
-                    Zurücksetzen
+                    Reset
                 </button>
                 {!showEvaluation && !isTaskComplete && (
                     <button onClick={() => setShowHint(!showHint)} className="hint-button">
                         Hinweis
+                    </button>
+                )}
+                {resetCount >= 3 && !isTaskComplete && (
+                    <button onClick={() => setShowSolution(!showSolution)} className="solution-button">
+                        Lösung
                     </button>
                 )}
                 {showEvaluation && isTaskComplete && (
@@ -224,6 +233,17 @@ const TaskViewer = ({ taskCode, errorMessage, hint, solution, fetchNewTask, isLo
                     <div className="hint-modal-content">
                         <p>{hint || "Kein Hinweis verfügbar"}</p>
                         <button className="close-button" onClick={toggleHintModal}>
+                            Schließen
+                        </button>
+                    </div>
+                </div>
+            )}
+
+            {showSolution && (
+                <div className="solution-modal">
+                    <div className="solution-modal-content">
+                        <p>{solution || "Keine Lösung verfügbar"}</p>
+                        <button className="close-button" onClick={() => setShowSolution(false)}>
                             Schließen
                         </button>
                     </div>
