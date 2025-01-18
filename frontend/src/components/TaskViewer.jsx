@@ -5,7 +5,7 @@ import "../styles/TaskViewer.css";
  * TaskViewer Component
  * Displays the task description, the editable code, and actions to validate or reset the task.
  */
-const TaskViewer = ({ taskCode, errorMessage, fetchNewTask, isLoading }) => {
+const TaskViewer = ({ taskCode, errorMessage, hint, solution, fetchNewTask, isLoading }) => {
     const [editableValues, setEditableValues] = useState({});
     const [activeIndex, setActiveIndex] = useState(null);
     const [feedbackMessage, setFeedbackMessage] = useState("");
@@ -15,11 +15,12 @@ const TaskViewer = ({ taskCode, errorMessage, fetchNewTask, isLoading }) => {
     const [evaluation, setEvaluation] = useState("");
     const [isTaskComplete, setIsTaskComplete] = useState(false);
     const [isDisabled, setIsDisabled] = useState(false);
+    const [showHint, setShowHint] = useState(false);
+    const [showSolution, setShowSolution] = useState(false);
 
     const originalValues = taskCode.split(/(\[\[.*?\]\])/).map((part) =>
         part.startsWith("[[") && part.endsWith("]]") ? part.slice(2, -2) : null
     );
-
 
     /**
      * Dynamically adjusts the width of input fields based on their content.
@@ -31,6 +32,13 @@ const TaskViewer = ({ taskCode, errorMessage, fetchNewTask, isLoading }) => {
         const length = value.length || 1;
         element.style.width = `${length + 1}ch`;
     };
+
+    /**
+     * Toggles the hint modal.
+     */
+    const toggleHintModal = () => {
+        setShowHint((prev) => !prev);
+    }
 
     /**
      * Adjusts input widths when the component mounts or when the taskCode changes.
@@ -191,6 +199,11 @@ const TaskViewer = ({ taskCode, errorMessage, fetchNewTask, isLoading }) => {
                 <button onClick={resetTask} className="reset-button" disabled={isLoading}>
                     Zurücksetzen
                 </button>
+                {!showEvaluation && !isTaskComplete && (
+                    <button onClick={() => setShowHint(!showHint)} className="hint-button">
+                        Hinweis
+                    </button>
+                )}
                 {showEvaluation && isTaskComplete && (
                     <button
                         onClick={() => {
@@ -205,6 +218,18 @@ const TaskViewer = ({ taskCode, errorMessage, fetchNewTask, isLoading }) => {
                 )}
                 {feedbackMessage && <p className="feedback">{feedbackMessage}</p>}
             </div>
+
+            {showHint && (
+                <div className="hint-modal">
+                    <div className="hint-modal-content">
+                        <p>{hint || "Kein Hinweis verfügbar"}</p>
+                        <button className="close-button" onClick={toggleHintModal}>
+                            Schließen
+                        </button>
+                    </div>
+                </div>
+            )}
+
         </div>
     );
 };
