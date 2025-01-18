@@ -18,6 +18,9 @@ public class SemicolonErrorTask extends Task {
     public SemicolonErrorTask(ContextStrategy context, int gapCount) {
         super(context, gapCount);
         expectedErrorMessage = "';' expected";
+        hintMessage = "In Java muss jede Anweisung mit einem Semikolon (;) beendet werden. " +
+                "Wenn diese Fehlermeldung auftritt, fehlt ein Semikolon.";
+        solutionMessage = "Lösche in einer beliebigen Lücke ein Semikolon (;).";
     }
 
     /**

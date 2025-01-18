@@ -17,6 +17,8 @@ public class VariableAlreadyDefinedErrorTask extends Task {
      */
     public VariableAlreadyDefinedErrorTask(ContextStrategy context, int gapCount) {
         super(context, gapCount);
+        hintMessage = "Wenn diese Fehlermeldung auftritt, wurde eine Variable mehrfach mit demselben Namen definiert.";
+        solutionMessage = "Ändere einen Variablennamen so ab, dass er identisch mit einer anderen Variable ist.";
     }
 
     /**

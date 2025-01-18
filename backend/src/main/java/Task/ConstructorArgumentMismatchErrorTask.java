@@ -23,6 +23,13 @@ public class ConstructorArgumentMismatchErrorTask extends Task {
                 "  required: " + generateExpectedConstructorSignature() + "\n" +
                 "  found: " + generateActualConstructorCallSignature() + "\n" +
                 "  reason: actual and formal argument lists differ in length";
+
+        hintMessage = "Die Fehlermeldung tritt auf, wenn der Aufruf des Konstruktors (in der Main-Methode) eine " +
+                "falsche Anzahl von Parametern enthält. Möglicherweise stimmen auch die Datentypen der " +
+                "übergebenen Werte nicht mit dem Konstruktor überein.";
+
+        solutionMessage = "Entferne einen der Parameter (in den runden Klammern) oder ändere ihn auf einen " +
+                "inkompatiblen Typ in der Lücke, um den Fehler zu erzeugen.";
     }
 
 

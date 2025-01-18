@@ -20,6 +20,9 @@ public class ReturnTypeRequiredErrorTask extends Task {
     public ReturnTypeRequiredErrorTask(ContextStrategy context, int gapCount) {
         super(context, gapCount);
         expectedErrorMessage = "invalid method declaration; \nreturn type required";
+        hintMessage = "Im Methodenkopf muss immer ein Rückgabetyp (void, int, etc.) enthalten sein. Dieser " +
+                "Fehler tritt auf, wenn dieser Rückgabewert fehlt.";
+        solutionMessage = "Lösche den Rückgabetyp (void, int, etc.) in einer Lücke vor einem Methodennamen.";
     }
 
     /**

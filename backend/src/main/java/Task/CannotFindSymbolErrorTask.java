@@ -19,6 +19,9 @@ public class CannotFindSymbolErrorTask extends Task {
     public CannotFindSymbolErrorTask(ContextStrategy context, int gapCount) {
         super(context, gapCount);
         expectedErrorMessage = "cannot find symbol";
+        hintMessage = "Wenn diese Fehlermeldung auftritt, wird eine Variable oder Methode verwendet, die vorher " +
+                "nicht deklariert wurde. Häufig ist dies auch auf Rechtschreibfehler zurückzuführen.";
+        solutionMessage = "Ändere den Namen einer Variablen oder Methode.";
     }
 
     /**

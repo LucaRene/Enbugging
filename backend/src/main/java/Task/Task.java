@@ -26,6 +26,8 @@ public abstract class Task {
 
     protected final int gapCount;
     protected String expectedErrorMessage;
+    protected String hintMessage;
+    protected String solutionMessage;
 
     /**
      * Constructs a new Task with the specified context, generating a random class
@@ -534,5 +536,41 @@ public abstract class Task {
      */
     public String getExpectedErrorMessage() {
         return expectedErrorMessage;
+    }
+
+    /**
+     * Retrieves the hint message for this task.
+     *
+     * @return the hint message
+     */
+    public String getHintMessage() {
+        return hintMessage;
+    }
+
+    /**
+     * Sets the hint message for this task.
+     *
+     * @param hint the hint message to set
+     */
+    public void setHintMessage(String hint) {
+        this.hintMessage = hint;
+    }
+
+    /**
+     * Retrieves the solution message for this task.
+     *
+     * @return the solution message
+     */
+    public String getSolutionMessage() {
+        return solutionMessage;
+    }
+
+    /**
+     * Sets the solution message for this task.
+     *
+     * @param solution the solution message to set
+     */
+    public void setSolutionMessage(String solution) {
+        this.solutionMessage = solution;
     }
 }

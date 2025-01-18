@@ -19,6 +19,10 @@ public class IllegalStartOfExpressionErrorTask extends Task {
     public IllegalStartOfExpressionErrorTask(ContextStrategy context, int gapCount) {
         super(context, gapCount);
         expectedErrorMessage = "illegal start of expression";
+        hintMessage = "Wenn dieser Fehler auftritt, wird ein ungültiger Ausdruck verwendet. Dies kann auch bedeuten, " +
+                "dass eine Methode in einer Methode definiert wurde, weil eine geschweifte Klammer (}) fehlt.";
+        solutionMessage = "Füge ein ungültiges Zeichen ein (z.B. [). Alternativ: Lösche eine geschweifte Klammer (}), " +
+                "sodass eine Methode in einer Methode definiert wird.";
     }
 
     /**
