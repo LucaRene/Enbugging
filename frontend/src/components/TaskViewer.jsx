@@ -5,7 +5,7 @@ import "../styles/TaskViewer.css";
  * TaskViewer Component
  * Displays the task description, the editable code, and actions to validate or reset the task.
  */
-const TaskViewer = ({ taskCode, errorMessage, hint, solution, fetchNewTask, isLoading }) => {
+const TaskViewer = ({ taskCode, errorMessage, hint, solution, fetchNewTask, isLoading, resetCount, setResetCount }) => {
     const [editableValues, setEditableValues] = useState({});
     const [activeIndex, setActiveIndex] = useState(null);
     const [feedbackMessage, setFeedbackMessage] = useState("");
@@ -17,8 +17,6 @@ const TaskViewer = ({ taskCode, errorMessage, hint, solution, fetchNewTask, isLo
     const [isDisabled, setIsDisabled] = useState(false);
     const [showHint, setShowHint] = useState(false);
     const [showSolution, setShowSolution] = useState(false);
-    const [resetCount, setResetCount] = useState(0);
-
 
     const originalValues = taskCode.split(/(\[\[.*?\]\])/).map((part) =>
         part.startsWith("[[") && part.endsWith("]]") ? part.slice(2, -2) : null

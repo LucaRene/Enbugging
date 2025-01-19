@@ -9,6 +9,7 @@ function App() {
         solutionMessage: ""
     });
     const [isLoading, setIsLoading] = useState(false);
+    const [resetCount, setResetCount] = useState(0);
 
     const fetchNewTask = async () => {
         setIsLoading(true);
@@ -18,6 +19,7 @@ function App() {
                 const data = await response.json();
                 console.log("Neue Aufgabe erhalten:", data);
                 setTaskData(data);
+                setResetCount(0);
             } else {
                 console.error("Fehler beim Abrufen der Aufgabe.");
             }
@@ -45,6 +47,8 @@ function App() {
                 solution={taskData.solutionMessage}
                 fetchNewTask={fetchNewTask}
                 isLoading={isLoading}
+                resetCount={resetCount}
+                setResetCount={setResetCount}
             />
         </div>
     );
