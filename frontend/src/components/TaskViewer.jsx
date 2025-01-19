@@ -3,9 +3,28 @@ import "../styles/TaskViewer.css";
 
 /**
  * TaskViewer Component
- * Displays the task description, the editable code, and actions to validate or reset the task.
+ * Manages the display of task descriptions, editable code sections, and actions for validation, resetting, and hints/solutions.
+ *
+ * @param {Object} props - The props passed to the component.
+ * @param {string} props.taskCode - The code with gaps for the user to edit.
+ * @param {string} props.errorMessage - The expected compiler error message for the task.
+ * @param {string} props.hint - The hint message to assist the user.
+ * @param {string} props.solution - The solution message to guide the user after multiple resets.
+ * @param {function} props.fetchNewTask - A function to fetch a new task from the backend.
+ * @param {boolean} props.isLoading - Indicates if a new task is currently being loaded.
+ * @param {number} props.resetCount - The number of times the task has been reset.
+ * @param {function} props.setResetCount - A function to update the reset counter.
  */
-const TaskViewer = ({ taskCode, errorMessage, hint, solution, fetchNewTask, isLoading, resetCount, setResetCount }) => {
+const TaskViewer = ({
+                        taskCode,
+                        errorMessage,
+                        hint,
+                        solution,
+                        fetchNewTask,
+                        isLoading,
+                        resetCount,
+                        setResetCount,
+                    }) => {
     const [editableValues, setEditableValues] = useState({});
     const [activeIndex, setActiveIndex] = useState(null);
     const [feedbackMessage, setFeedbackMessage] = useState("");
@@ -18,6 +37,7 @@ const TaskViewer = ({ taskCode, errorMessage, hint, solution, fetchNewTask, isLo
     const [showHint, setShowHint] = useState(false);
     const [showSolution, setShowSolution] = useState(false);
 
+    // Extracts the original values of the editable sections from the provided taskCode.
     const originalValues = taskCode.split(/(\[\[.*?\]\])/).map((part) =>
         part.startsWith("[[") && part.endsWith("]]") ? part.slice(2, -2) : null
     );
@@ -25,8 +45,8 @@ const TaskViewer = ({ taskCode, errorMessage, hint, solution, fetchNewTask, isLo
     /**
      * Dynamically adjusts the width of input fields based on their content.
      *
-     * @param {HTMLElement} element - The input element.
-     * @param {string} value - The current value of the input field.
+     * @param {HTMLElement} element - The input element whose width needs adjustment.
+     * @param {string} value - The value currently entered the input field.
      */
     const adjustInputWidth = (element, value) => {
         const length = value.length || 1;
@@ -34,14 +54,21 @@ const TaskViewer = ({ taskCode, errorMessage, hint, solution, fetchNewTask, isLo
     };
 
     /**
-     * Toggles the hint modal.
+     * Toggles the visibility of the hint modal.
      */
     const toggleHintModal = () => {
         setShowHint((prev) => !prev);
-    }
+    };
 
     /**
-     * Adjusts input widths when the component mounts or when the taskCode changes.
+     * Toggles the visibility of the solution modal.
+     */
+    const toggleSolutionModal = () => {
+        setShowSolution((prev) => !prev);
+    };
+
+    /**
+     * Automatically adjusts the width of editable input fields when the component mounts or when taskCode changes.
      */
     useEffect(() => {
         const inputs = document.querySelectorAll(".editable-input");
@@ -51,11 +78,11 @@ const TaskViewer = ({ taskCode, errorMessage, hint, solution, fetchNewTask, isLo
     }, [taskCode]);
 
     /**
-     * Handles changes in input fields, adjusting widths and managing the active index.
+     * Handles changes to input fields, adjusts their width dynamically, and manages the active index.
      *
-     * @param {number} index - The index of the input field.
-     * @param {string} value - The new value of the input field.
-     * @param {HTMLElement} element - The input element.
+     * @param {number} index - The index of the input field being changed.
+     * @param {string} value - The new value entered the input field.
+     * @param {HTMLElement} element - The input element being modified.
      */
     const handleInputChange = (index, value, element) => {
         adjustInputWidth(element, value);
@@ -72,7 +99,7 @@ const TaskViewer = ({ taskCode, errorMessage, hint, solution, fetchNewTask, isLo
     };
 
     /**
-     * Resets the task to its original state, clearing edits and feedback messages.
+     * Resets the task to its original state, clearing user edits, feedback, and resetting relevant state variables.
      */
     const resetTask = () => {
         setEditableValues({});
@@ -87,9 +114,8 @@ const TaskViewer = ({ taskCode, errorMessage, hint, solution, fetchNewTask, isLo
         setResetCount((prevCount) => prevCount + 1);
     };
 
-
     /**
-     * Sends the user's code to the server for validation and displays the response.
+     * Sends the user's code to the server for validation and processes the response.
      */
     const validateCode = async () => {
         const parts = taskCode.split(/(\[\[.*?\]\])/);
@@ -110,7 +136,7 @@ const TaskViewer = ({ taskCode, errorMessage, hint, solution, fetchNewTask, isLo
                 body: JSON.stringify({ code: userCode, expectedError: errorMessage }),
             });
 
-            console.log("API-Antwort erhalten:", response); // Debugging
+            console.log("API response received:", response); // Debugging
 
             const result = await response.json();
             if (response.ok) {
@@ -124,15 +150,15 @@ const TaskViewer = ({ taskCode, errorMessage, hint, solution, fetchNewTask, isLo
                 setFeedbackMessage("Ein Fehler ist aufgetreten.");
             }
         } catch (error) {
-            console.error("Fehler:", error); // Debugging
+            console.error("Error:", error); // Debugging
             setFeedbackMessage(`Fehler beim Senden der Anfrage: ${error.message}`);
         }
     };
 
     /**
-     * Renders the code with input fields for editable sections.
+     * Renders the code with editable inputs for user modification.
      *
-     * @returns {JSX.Element[]} The rendered code with editable inputs.
+     * @returns {JSX.Element[]} The rendered code with inputs in place of editable sections.
      */
     const renderCodeWithInputs = () => {
         const parts = taskCode.split(/(\[\[.*?\]\])/);
@@ -154,8 +180,14 @@ const TaskViewer = ({ taskCode, errorMessage, hint, solution, fetchNewTask, isLo
                             margin: "0 2px",
                             fontFamily: "monospace",
                             minWidth: `${cleanPart.length + 1}ch`,
-                            backgroundColor: isDisabled || (activeIndex !== null && activeIndex !== index) ? "#444" : "#2e2e2e",
-                            color: isDisabled || (activeIndex !== null && activeIndex !== index) ? "#888" : "#fff",
+                            backgroundColor:
+                                isDisabled || (activeIndex !== null && activeIndex !== index)
+                                    ? "#444"
+                                    : "#2e2e2e",
+                            color:
+                                isDisabled || (activeIndex !== null && activeIndex !== index)
+                                    ? "#888"
+                                    : "#fff",
                         }}
                     />
                 );
@@ -184,11 +216,17 @@ const TaskViewer = ({ taskCode, errorMessage, hint, solution, fetchNewTask, isLo
                         }`}
                     >
                         <h3>Auswertung</h3>
-                        <p><strong>Zielfehlermeldung:</strong></p>
+                        <p>
+                            <strong>Zielfehlermeldung:</strong>
+                        </p>
                         <pre>{expectedError}</pre>
-                        <p><strong>Tatsächlicher Output des Compilers:</strong></p>
+                        <p>
+                            <strong>Tatsächlicher Output des Compilers:</strong>
+                        </p>
                         <pre>{actualError}</pre>
-                        <p><strong>Auswertung:</strong></p>
+                        <p>
+                            <strong>Auswertung:</strong>
+                        </p>
                         <pre> {evaluation} </pre>
                     </div>
                 )}
@@ -202,12 +240,12 @@ const TaskViewer = ({ taskCode, errorMessage, hint, solution, fetchNewTask, isLo
                     Reset
                 </button>
                 {!showEvaluation && !isTaskComplete && (
-                    <button onClick={() => setShowHint(!showHint)} className="hint-button">
+                    <button onClick={toggleHintModal} className="hint-button">
                         Hinweis
                     </button>
                 )}
                 {resetCount >= 3 && !isTaskComplete && (
-                    <button onClick={() => setShowSolution(!showSolution)} className="solution-button">
+                    <button onClick={toggleSolutionModal} className="solution-button">
                         Lösung
                     </button>
                 )}
@@ -241,13 +279,12 @@ const TaskViewer = ({ taskCode, errorMessage, hint, solution, fetchNewTask, isLo
                 <div className="solution-modal">
                     <div className="solution-modal-content">
                         <p>{solution || "Keine Lösung verfügbar"}</p>
-                        <button className="close-button" onClick={() => setShowSolution(false)}>
+                        <button className="close-button" onClick={toggleSolutionModal}>
                             Schließen
                         </button>
                     </div>
                 </div>
             )}
-
         </div>
     );
 };
