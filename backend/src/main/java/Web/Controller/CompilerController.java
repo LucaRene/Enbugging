@@ -20,6 +20,11 @@ public class CompilerController {
     private final CodeCompiler codeCompiler;
     private final TrackingService trackingService;
 
+    /**
+     * Constructor to initialize the compiler controller.
+     *
+     * @param trackingService The tracking service to use
+     */
     public CompilerController(TrackingService trackingService) {
         this.codeCompiler = new CodeCompiler();
         this.trackingService = trackingService;
@@ -60,6 +65,15 @@ public class CompilerController {
         interaction.setSolvedCorrectly(isCorrect);
         interaction.setAttemptCount(interaction.getAttemptCount() + 1);
         interaction.setEndTime(LocalDateTime.now());
+
+        if (isCorrect) {
+            if (interaction.getAttemptCount() == 1) {
+                trackingService.decreaseTaskPerformance(interaction.getTaskType());
+            } else if (interaction.getAttemptCount() > 2) {
+                trackingService.increaseTaskPerformance(interaction.getTaskType());
+            }
+        }
+
         trackingService.rewriteCSV();
 
         return ResponseEntity.ok(Map.of(

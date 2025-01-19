@@ -21,6 +21,7 @@ public class ReachedEndOfFileErrorTask extends Task {
         hintMessage = "Der Inhalt einer Klasse in Java befindet sich immer zwischen zwei geschweiften " +
                 "Klammern ({, }). Wenn diese Fehlermeldung auftritt, fehlt mindestens eine schließende Klammer (}).";
         solutionMessage = "Entferne eine schließende geschweifte Klammer (}) am Ende der Klasse.";
+        taskType = "ReachedEndOfFileErrorTask";
     }
 
     /**

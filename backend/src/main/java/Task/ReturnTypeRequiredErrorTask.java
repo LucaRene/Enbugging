@@ -23,6 +23,7 @@ public class ReturnTypeRequiredErrorTask extends Task {
         hintMessage = "Im Methodenkopf muss immer ein Rückgabetyp (void, int, etc.) enthalten sein. Dieser " +
                 "Fehler tritt auf, wenn dieser Rückgabewert fehlt.";
         solutionMessage = "Lösche den Rückgabetyp (void, int, etc.) in einer Lücke vor einem Methodennamen.";
+        taskType = "ReturnTypeRequiredErrorTask";
     }
 
     /**

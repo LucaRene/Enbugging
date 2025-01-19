@@ -31,11 +31,13 @@ public class StringConvertToIntOrDoubleErrorTask extends Task {
             hintMessage = "Bei dieser Fehlermeldung, passen die Datentypen nicht zusammen. Der Nutzer hat hier " +
                     "versucht einen String-wert in einer Variable, die int-Werte speichert, zu speichern.";
             solutionMessage = "Ändere bei einer String-Variable den Datentyp bei der Deklaration zu int.";
+            taskType = "StringConvertToIntOrDoubleErrorTask";
         } else {
             expectedErrorMessage = "incompatible types: \njava.lang.String cannot be converted to double";
             hintMessage = "Bei dieser Fehlermeldung, passen die Datentypen nicht zusammen. Der Nutzer hat hier " +
                     "versucht einen String-wert in einer Variable, die double-Werte speichert, zu speichern.";
             solutionMessage = "Ändere bei einer String-Variable den Datentyp bei der Deklaration zu double.";
+            taskType = "StringConvertToIntOrDoubleErrorTask";
         }
 
         while (!getTaskCodeWithoutGaps().contains(STRING_KEYWORD)) {

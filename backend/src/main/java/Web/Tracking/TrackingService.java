@@ -1,5 +1,7 @@
 package Web.Tracking;
 
+import Task.TaskTypeProvider;
+import Web.Service.TaskService;
 import org.springframework.stereotype.Service;
 
 import java.io.FileWriter;
@@ -15,18 +17,30 @@ import java.util.List;
 @Service
 public class TrackingService {
 
+    private final int DEFAULT_SCORE = 5;
     private final List<UserInteraction> userInteractions;
     private final HashMap<String, Integer> taskPerformance;
-    private String csvFilePath;
+    private final String csvFilePath;
 
     /**
      * Constructor initializes tracking data structures.
      */
-    public TrackingService() {
+    public TrackingService(List<String> taskTypes) {
         this.userInteractions = new ArrayList<>();
         this.taskPerformance = new HashMap<>();
         this.csvFilePath = Paths.get(System.getProperty("user.dir"), "user_interactions.csv").toString();
+        TaskTypeProvider taskTypeProvider = new TaskTypeProvider();
         initializeCSV();
+        initializeTaskPerformance(taskTypeProvider.getTaskTypes());
+    }
+
+    /**
+     * Initializes the task performance map with default scores.
+     */
+    private void initializeTaskPerformance(List<String> taskTypes) {
+        for (String taskType : taskTypes) {
+            taskPerformance.put(taskType, DEFAULT_SCORE);
+        }
     }
 
     /**
@@ -47,15 +61,6 @@ public class TrackingService {
      */
     public void recordInteraction(UserInteraction interaction) {
         userInteractions.add(interaction);
-
-        taskPerformance.putIfAbsent(interaction.getTaskType(), 0);
-
-        if (interaction.getAttemptCount() == 1) {
-            taskPerformance.put(interaction.getTaskType(), taskPerformance.get(interaction.getTaskType()) + 1);
-        } else {
-            taskPerformance.put(interaction.getTaskType(), taskPerformance.get(interaction.getTaskType()) - 1);
-        }
-
         rewriteCSV();
     }
 
@@ -88,21 +93,29 @@ public class TrackingService {
                 interaction.isSolvedCorrectly());
     }
 
+
     /**
-     * Adjusts the likelihood of generating specific tasks based on user performance.
+     * Increases the performance score for a specific task type.
      *
-     * @return A map of task types and their adjusted weights.
+     * @param taskType The task type to increase the performance score for.
      */
-    public HashMap<String, Integer> getTaskGenerationWeights() {
-        HashMap<String, Integer> weights = new HashMap<>();
-
-        for (String taskType : taskPerformance.keySet()) {
-            int performanceScore = taskPerformance.get(taskType);
-
-            weights.put(taskType, Math.max(1, 10 - performanceScore));
+    public void increaseTaskPerformance(String taskType) {
+        taskPerformance.putIfAbsent(taskType, 5);
+        if (taskPerformance.get(taskType) < 10){
+            taskPerformance.put(taskType, taskPerformance.get(taskType) + 1);
         }
+    }
 
-        return weights;
+    /**
+     * Decreases the performance score for a specific task type.
+     *
+     * @param taskType The task type to decrease the performance score for.
+     */
+    public void decreaseTaskPerformance(String taskType) {
+        taskPerformance.putIfAbsent(taskType, 5);
+        if (taskPerformance.get(taskType) > 1) {
+            taskPerformance.put(taskType, taskPerformance.get(taskType) - 1);
+        }
     }
 
     /**
@@ -121,5 +134,14 @@ public class TrackingService {
      */
     public List<UserInteraction> getUserInteractions() {
         return userInteractions;
+    }
+
+    /**
+     * Returns the task performance map.
+     *
+     * @return The task performance map.
+     */
+    public HashMap<String, Integer> getTaskPerformance() {
+        return taskPerformance;
     }
 }

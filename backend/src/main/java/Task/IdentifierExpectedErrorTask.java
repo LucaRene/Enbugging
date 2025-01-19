@@ -25,6 +25,7 @@ public class IdentifierExpectedErrorTask extends Task {
         hintMessage = "Diese Fehlermeldung tritt auf, wenn der Nutzer versucht eine Variable/Methode zu deklarieren, " +
                 "allerdings den Namen der Variable/Methode vergisst.";
         solutionMessage = "Lösche den Variablen- oder Methodennamen in einer entsprechenden Lücke.";
+        taskType = "IdentifierExpectedErrorTask";
     }
 
     /**

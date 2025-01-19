@@ -21,6 +21,7 @@ public class UnclosedStringErrorTask extends Task {
         hintMessage = "Diese Fehlermeldung tritt auf, wenn eine Zeichenkette niemals geschlossen wird. Ein String" +
                 " muss mit einem doppelten Anführungszeichen (\") beginnen und enden.";
         solutionMessage = "Entferne eines der Anführungszeichen (\").";
+        taskType = "UnclosedStringErrorTask";
 
         int stringAttributeCount = countStringAttributes();
         while (stringAttributeCount < 1) {

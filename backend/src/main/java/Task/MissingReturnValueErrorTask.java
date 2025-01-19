@@ -22,6 +22,7 @@ public class MissingReturnValueErrorTask extends Task {
         expectedErrorMessage = "missing return value";
         hintMessage = "Diese Fehlermeldung tritt auf, wenn bei einer Methode mit Rückgabewert vergessen wird, einen Wert nach dem return anzugeben.";
         solutionMessage = "Lösche einen Variablennamen nach einem return.";
+        taskType = "MissingReturnValueErrorTask";
     }
 
     /**
