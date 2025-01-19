@@ -1,9 +1,12 @@
 package Web.Controller;
 
 import Compiler.CodeCompiler;
+import Web.Tracking.TrackingService;
+import Web.Tracking.UserInteraction;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -15,9 +18,11 @@ import java.util.Map;
 public class CompilerController {
 
     private final CodeCompiler codeCompiler;
+    private final TrackingService trackingService;
 
-    public CompilerController() {
+    public CompilerController(TrackingService trackingService) {
         this.codeCompiler = new CodeCompiler();
+        this.trackingService = trackingService;
     }
 
     /**
@@ -49,6 +54,13 @@ public class CompilerController {
         String normalizedActualError = normalizeErrorMessage(actualError);
 
         boolean isCorrect = normalizedActualError.contains(normalizedExpectedError);
+
+        UserInteraction interaction = trackingService.getUserInteractions()
+                .get(trackingService.getUserInteractions().size() - 1);
+        interaction.setSolvedCorrectly(isCorrect);
+        interaction.setAttemptCount(interaction.getAttemptCount() + 1);
+        interaction.setEndTime(LocalDateTime.now());
+        trackingService.rewriteCSV();
 
         return ResponseEntity.ok(Map.of(
                 "status", isCorrect ? "success" : "error",
