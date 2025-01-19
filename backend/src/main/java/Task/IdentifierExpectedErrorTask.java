@@ -22,6 +22,9 @@ public class IdentifierExpectedErrorTask extends Task {
     public IdentifierExpectedErrorTask(ContextStrategy context, int gapCount) {
         super(context, gapCount);
         expectedErrorMessage = "<identifier> expected";
+        hintMessage = "Diese Fehlermeldung tritt auf, wenn der Nutzer versucht eine Variable/Methode zu deklarieren, " +
+                "allerdings den Namen der Variable/Methode vergisst.";
+        solutionMessage = "Lösche den Variablen- oder Methodennamen in einer entsprechenden Lücke.";
     }
 
     /**

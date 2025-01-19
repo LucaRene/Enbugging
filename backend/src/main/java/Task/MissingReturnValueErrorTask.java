@@ -20,6 +20,8 @@ public class MissingReturnValueErrorTask extends Task {
     public MissingReturnValueErrorTask(ContextStrategy context, int gapCount) {
         super(context, gapCount);
         expectedErrorMessage = "missing return value";
+        hintMessage = "Diese Fehlermeldung tritt auf, wenn bei einer Methode mit Rückgabewert vergessen wird, einen Wert nach dem return anzugeben.";
+        solutionMessage = "Lösche einen Variablennamen nach einem return.";
     }
 
     /**

@@ -20,6 +20,9 @@ public class MissingReturnStatementErrorTask extends Task {
     public MissingReturnStatementErrorTask(ContextStrategy context, int gapCount) {
         super(context, gapCount);
         expectedErrorMessage = "missing return statement";
+        hintMessage = "Wenn diese Fehlermeldung auftritt, hat eine Methode mit Rückgabewert keine return-Anweisung.";
+        solutionMessage = "Wandle einen void-Rückgabewert (in einem Methodenkopf) " +
+                "in einen Datentyp (z.B. int, String, …) um.";
     }
 
     /**

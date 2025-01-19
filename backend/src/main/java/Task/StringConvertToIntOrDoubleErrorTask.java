@@ -28,8 +28,14 @@ public class StringConvertToIntOrDoubleErrorTask extends Task {
         Random random = new Random();
         if (random.nextBoolean()) {
             expectedErrorMessage = "incompatible types: \njava.lang.String cannot be converted to int";
+            hintMessage = "Bei dieser Fehlermeldung, passen die Datentypen nicht zusammen. Der Nutzer hat hier " +
+                    "versucht einen String-wert in einer Variable, die int-Werte speichert, zu speichern.";
+            solutionMessage = "Ändere bei einer String-Variable den Datentyp bei der Deklaration zu int.";
         } else {
             expectedErrorMessage = "incompatible types: \njava.lang.String cannot be converted to double";
+            hintMessage = "Bei dieser Fehlermeldung, passen die Datentypen nicht zusammen. Der Nutzer hat hier " +
+                    "versucht einen String-wert in einer Variable, die double-Werte speichert, zu speichern.";
+            solutionMessage = "Ändere bei einer String-Variable den Datentyp bei der Deklaration zu double.";
         }
 
         while (!getTaskCodeWithoutGaps().contains(STRING_KEYWORD)) {

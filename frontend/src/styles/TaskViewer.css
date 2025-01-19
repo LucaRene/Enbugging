@@ -126,15 +126,24 @@ body {
     text-align: center;
 }
 
+.validate-button,
+.reset-button,
+.next-task-button,
+.hint-button,
+.solution-button {
+    font-weight: normal;
+    font-size: 1rem;
+    border-radius: 5px;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin: 0 3px;
+}
+
 .validate-button {
     background-color: #4caf50;
     color: white;
-    border: none;
-    padding: 10px 20px;
-    font-size: 1rem;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
 }
 
 .validate-button:hover {
@@ -143,13 +152,7 @@ body {
 
 .reset-button {
     background-color: #dc3545;
-    color: #fff;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 1rem;
-    margin-left: 10px;
+    color: white;
 }
 
 .reset-button:hover {
@@ -158,23 +161,76 @@ body {
 
 .next-task-button {
     background-color: #007bff;
-    color: #fff;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 1rem;
-    margin-left: 10px;
+    color: white;
 }
 
 .next-task-button:hover {
     background-color: #0056b3;
 }
 
+.hint-button {
+    background-color: #ff9800;
+    color: white;
+}
+
+.hint-button:hover {
+    background-color: #e68a00;
+}
+
+.solution-button {
+    background-color: #17a2b8;
+    color: white;
+}
+
+.solution-button:hover {
+    background-color: #138496;
+}
+
 .feedback {
-     margin-top: 10px;
-     font-size: 1.2rem;
-     color: #ffb0b0;
-     text-align: center;
-     white-space: pre-wrap;
- }
+    margin-top: 10px;
+    font-size: 1.2rem;
+    color: #ffb0b0;
+    text-align: center;
+    white-space: pre-wrap;
+}
+
+.hint-modal,
+.solution-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.hint-modal-content,
+.solution-modal-content{
+    background-color: #2e2e2e;
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 80%;
+    max-width: 400px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    animation: fadeIn 0.3s ease;
+}
+
+.close-button {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.close-button:hover {
+    background-color: #c82333;
+}

@@ -25,6 +25,9 @@ public class IntConvertToStringErrorTask extends Task {
     public IntConvertToStringErrorTask(ContextStrategy context, int gapCount) {
         super(context, gapCount);
         expectedErrorMessage = "incompatible types: \nint cannot be converted to java.lang.String";
+        hintMessage = "Bei dieser Fehlermeldung, passen die Datentypen nicht zusammen. Der Nutzer hat hier versucht " +
+                "einen int-Wert in einer Variable, die String-Werte speichert, zu speichern.";
+        solutionMessage = "Ändere bei einer int-Variable den Datentyp bei der Deklaration zu einem String.";
 
         while (!getTaskCodeWithoutGaps().contains("int")) {
             resetTask();
