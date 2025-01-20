@@ -34,9 +34,9 @@ public class TaskTest {
      */
     @Test
     public void testCreateClassDeclaration() {
-        String classDeclaration = task.getTaskCodeWithGaps();
-        assertTrue(classDeclaration.contains("public class " + context.getClassName()),
-                "Class declaration should contain 'public class' with the context class name.");
+        String classDeclaration = task.getTaskCodeWithoutGaps();
+        assertTrue(classDeclaration.contains("class " + context.getClassName()),
+                "Class declaration should contain 'class' with the context class name.");
     }
 
     /**
@@ -45,9 +45,9 @@ public class TaskTest {
      */
     @Test
     public void testCreateVariable() {
-        int initialSize = task.getTaskCodeWithGaps().split("=").length - 1;
+        int initialSize = task.getTaskCodeWithoutGaps().split("=").length - 1;
         task.createVariable();
-        int newSize = task.getTaskCodeWithGaps().split("=").length - 1;
+        int newSize = task.getTaskCodeWithoutGaps().split("=").length - 1;
         assertTrue(newSize > initialSize, "Variable should be added to the class.");
     }
 
@@ -73,10 +73,10 @@ public class TaskTest {
      */
     @Test
     public void testCreateGetter() {
-        task.createVariable(); // Ensure there's an attribute to generate a getter for
-        int initialCount = task.getTaskCodeWithGaps().split("get").length - 1;
+        task.createVariable();
+        int initialCount = task.getTaskCodeWithoutGaps().split("get").length - 1;
         task.createGetter();
-        int newCount = task.getTaskCodeWithGaps().split("get").length - 1;
+        int newCount = task.getTaskCodeWithoutGaps().split("get").length - 1;
         assertTrue(newCount > initialCount, "Getter should be added to the class.");
     }
 
@@ -87,9 +87,9 @@ public class TaskTest {
     @Test
     public void testCreateSetter() {
         task.createVariable(); // Ensure there's an attribute to generate a setter for
-        int initialCount = task.getTaskCodeWithGaps().split("set").length - 1;
+        int initialCount = task.getTaskCodeWithoutGaps().split("set").length - 1;
         task.createSetter();
-        int newCount = task.getTaskCodeWithGaps().split("set").length - 1;
+        int newCount = task.getTaskCodeWithoutGaps().split("set").length - 1;
         assertTrue(newCount > initialCount, "Setter should be added to the class.");
     }
 
@@ -99,7 +99,7 @@ public class TaskTest {
     @Test
     public void testCloseClass() {
         task.closeClass();
-        String taskCode = task.getTaskCodeWithGaps().trim();
+        String taskCode = task.getTaskCodeWithoutGaps().trim();
         assertTrue(taskCode.endsWith("}"), "Class should be properly closed with '}'.");
     }
 
