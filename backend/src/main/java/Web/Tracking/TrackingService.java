@@ -144,4 +144,13 @@ public class TrackingService {
     public HashMap<String, Integer> getTaskPerformance() {
         return taskPerformance;
     }
+
+    /**
+     * Returns the default score for tasks.
+     *
+     * @return The default score for tasks.
+     */
+    public int getDEFAULT_SCORE() {
+        return DEFAULT_SCORE;
+    }
 }

@@ -44,8 +44,18 @@ public class TaskService {
             }
         }
 
+        int averageScore = taskTypeProvider.getTaskTypes().size() * trackingService.getDEFAULT_SCORE();
+        int actualScore = weightedTaskTypes.size();
+        int gapCount = random.nextInt(3) + 5;
+
+        if (actualScore < averageScore-10) {
+            gapCount = random.nextInt(4) + 6;
+        } else if (actualScore > averageScore+10) {
+            gapCount = random.nextInt(2) + 3;
+        }
+
         String selectedTaskType = weightedTaskTypes.get(random.nextInt(weightedTaskTypes.size()));
-        return TaskFactory.createTask(selectedTaskType, 6);
+        return TaskFactory.createTask(selectedTaskType, gapCount);
     }
 
 }
