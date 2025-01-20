@@ -22,6 +22,7 @@ public class CannotFindSymbolErrorTask extends Task {
         hintMessage = "Wenn diese Fehlermeldung auftritt, wird eine Variable oder Methode verwendet, die vorher " +
                 "nicht deklariert wurde. Häufig ist dies auch auf Rechtschreibfehler zurückzuführen.";
         solutionMessage = "Ändere den Namen einer Variablen oder Methode.";
+        taskType = "CannotFindSymbolErrorTask";
     }
 
     /**

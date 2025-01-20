@@ -23,6 +23,7 @@ public class IllegalStartOfExpressionErrorTask extends Task {
                 "dass eine Methode in einer Methode definiert wurde, weil eine geschweifte Klammer (}) fehlt.";
         solutionMessage = "Füge ein ungültiges Zeichen ein (z.B. [). Alternativ: Lösche eine geschweifte Klammer (}), " +
                 "sodass eine Methode in einer Methode definiert wird.";
+        taskType = "IllegalStartOfExpressionErrorTask";
     }
 
     /**

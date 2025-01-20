@@ -26,6 +26,7 @@ public abstract class Task {
 
     protected final int gapCount;
     protected String expectedErrorMessage;
+    protected String taskType;
     protected String hintMessage;
     protected String solutionMessage;
 
@@ -572,5 +573,14 @@ public abstract class Task {
      */
     public void setSolutionMessage(String solution) {
         this.solutionMessage = solution;
+    }
+
+    /**
+     * Retrieves the task type for this task.
+     *
+     * @return the task type
+     */
+    public String getTaskType() {
+        return taskType;
     }
 }

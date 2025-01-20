@@ -23,6 +23,7 @@ public class MissingReturnStatementErrorTask extends Task {
         hintMessage = "Wenn diese Fehlermeldung auftritt, hat eine Methode mit Rückgabewert keine return-Anweisung.";
         solutionMessage = "Wandle einen void-Rückgabewert (in einem Methodenkopf) " +
                 "in einen Datentyp (z.B. int, String, …) um.";
+        taskType = "MissingReturnStatementErrorTask";
     }
 
     /**

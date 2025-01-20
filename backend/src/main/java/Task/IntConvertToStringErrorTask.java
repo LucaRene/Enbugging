@@ -28,6 +28,7 @@ public class IntConvertToStringErrorTask extends Task {
         hintMessage = "Bei dieser Fehlermeldung, passen die Datentypen nicht zusammen. Der Nutzer hat hier versucht " +
                 "einen int-Wert in einer Variable, die String-Werte speichert, zu speichern.";
         solutionMessage = "Ändere bei einer int-Variable den Datentyp bei der Deklaration zu einem String.";
+        taskType = "IntConvertToStringErrorTask";
 
         while (!getTaskCodeWithoutGaps().contains("int")) {
             resetTask();

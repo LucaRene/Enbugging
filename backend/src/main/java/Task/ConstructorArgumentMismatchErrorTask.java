@@ -30,6 +30,8 @@ public class ConstructorArgumentMismatchErrorTask extends Task {
 
         solutionMessage = "Entferne einen der Parameter (in den runden Klammern) oder ändere ihn auf einen " +
                 "inkompatiblen Typ in der Lücke, um den Fehler zu erzeugen.";
+
+        taskType = "ConstructorArgumentMismatchErrorTask";
     }
 
 

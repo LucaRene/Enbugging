@@ -2,11 +2,11 @@ package Web.Service;
 
 import Task.Task;
 import Task.TaskFactory;
+import Task.TaskTypeProvider;
+import Web.Tracking.TrackingService;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 /**
  * Service to handle task generation logic.
@@ -14,28 +14,48 @@ import java.util.Random;
 @Service
 public class TaskService {
 
+    final TrackingService trackingService;
+    final TaskTypeProvider taskTypeProvider;
+
     /**
-     * Generates a random task.
+     * Constructor to initialize the task service.
      *
-     * @return a Task instance
+     * @param trackingService The tracking service to use
+     */
+    public TaskService(TrackingService trackingService) {
+        this.trackingService = trackingService;
+        taskTypeProvider = new TaskTypeProvider();
+    }
+
+    /**
+     * Generates a random task based on the user's previous interactions.
+     *
+     * @return A randomly generated task
      */
     public Task generateRandomTask() {
         Random random = new Random();
-        List<String> possibleErrors = new ArrayList<String>();
-        possibleErrors.add("SemicolonErrorTask");
-        possibleErrors.add("UnclosedStringErrorTask");
-        possibleErrors.add("ReachedEndOfFileErrorTask");
-        possibleErrors.add("CannotFindSymbolErrorTask");
-        possibleErrors.add("ReturnTypeRequiredErrorTask");
-        possibleErrors.add("IllegalStartOfExpressionErrorTask");
-        possibleErrors.add("IntConvertToStringErrorTask");
-        possibleErrors.add("StringConvertToIntOrDoubleErrorTask");
-        possibleErrors.add("VariableAlreadyDefinedErrorTask");
-        possibleErrors.add("IdentifierExpectedErrorTask");
-        possibleErrors.add("MissingReturnValueErrorTask");
-        possibleErrors.add("MissingReturnStatementErrorTask");
-        possibleErrors.add("ConstructorArgumentMismatchErrorTask");
 
-        return TaskFactory.createTask(possibleErrors.get(random.nextInt(possibleErrors.size())), 6);
+        List<String> weightedTaskTypes = new ArrayList<>(taskTypeProvider.getTaskTypes());
+        for (HashMap.Entry<String, Integer> entry : trackingService.getTaskPerformance().entrySet()) {
+            String taskType = entry.getKey();
+            int weight = entry.getValue();
+            for (int i = 1; i < weight; i++) {
+                weightedTaskTypes.add(taskType);
+            }
+        }
+
+        int averageScore = taskTypeProvider.getTaskTypes().size() * trackingService.getDEFAULT_SCORE();
+        int actualScore = weightedTaskTypes.size();
+        int gapCount = random.nextInt(3) + 5;
+
+        if (actualScore < averageScore-10) {
+            gapCount = random.nextInt(4) + 6;
+        } else if (actualScore > averageScore+10) {
+            gapCount = random.nextInt(2) + 3;
+        }
+
+        String selectedTaskType = weightedTaskTypes.get(random.nextInt(weightedTaskTypes.size()));
+        return TaskFactory.createTask(selectedTaskType, gapCount);
     }
+
 }
