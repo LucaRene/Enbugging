@@ -19,16 +19,16 @@ public class TaskTypeProvider {
         return List.of(
                 "SemicolonErrorTask",
                 "UnclosedStringErrorTask",
-                "ReachedEndOfFileErrorTask",
+                // "ReachedEndOfFileErrorTask",
                 "CannotFindSymbolErrorTask",
                 "ReturnTypeRequiredErrorTask",
                 "IllegalStartOfExpressionErrorTask",
                 "IntConvertToStringErrorTask",
-                "StringConvertToIntOrDoubleErrorTask",
-                "VariableAlreadyDefinedErrorTask",
+                // "StringConvertToIntOrDoubleErrorTask",
+                // "VariableAlreadyDefinedErrorTask",
                 "IdentifierExpectedErrorTask",
                 "MissingReturnValueErrorTask",
-                "MissingReturnStatementErrorTask",
+                // "MissingReturnStatementErrorTask",
                 "ConstructorArgumentMismatchErrorTask"
         );
     }
