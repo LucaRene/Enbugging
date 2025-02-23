@@ -36,6 +36,7 @@ const TaskViewer = ({
     const [isDisabled, setIsDisabled] = useState(false);
     const [showHint, setShowHint] = useState(false);
     const [showSolution, setShowSolution] = useState(false);
+    const [userInteractions, setUserInteractions] = useState([]);
 
     // Extracts the original values of the editable sections from the provided taskCode.
     const originalValues = taskCode.split(/(\[\[.*?\]\])/).map((part) =>
@@ -196,6 +197,86 @@ const TaskViewer = ({
         });
     };
 
+    /**
+     * Ruft die User-Interaktionen vom Backend ab.
+     */
+    const fetchUserInteractions = async () => {
+        try {
+            const response = await fetch("http://localhost:8080/api/tracking/interactions");
+            const data = await response.json();
+
+            if (Array.isArray(data) && data.length > 0) {
+                setUserInteractions(data);
+                console.log("Erhaltene User-Interaktionen:", data); // Debugging
+            } else {
+                console.warn("API hat keine oder fehlerhafte Daten geliefert.", data);
+                setUserInteractions([]);
+            }
+        } catch (error) {
+            console.error("Fehler beim Laden der Tracking-Daten:", error);
+        }
+    };
+
+    /**
+     * Erstellt eine CSV-Datei aus den API-Daten.
+     */
+    const generateCSV = () => {
+        if (userInteractions.length === 0) {
+            console.warn("Keine User-Interaktionsdaten vorhanden.");
+            return "";
+        }
+
+        let csvContent = "TaskType,StartTime,EndTime,Attempts,SolvedCorrectly\n";
+
+        userInteractions.forEach((interaction) => {
+            csvContent += `${interaction.taskType},${interaction.startTime},${interaction.endTime},${interaction.attemptCount},${interaction.solvedCorrectly}\n`;
+        });
+
+        console.log("Generierte CSV-Daten:", csvContent); // Debugging
+        return csvContent;
+    };
+
+    /**
+     * Erstellt eine CSV-Datei und startet den Download.
+     */
+    const downloadCSV = async () => {
+        try {
+            const response = await fetch("http://localhost:8080/api/tracking/interactions");
+            const data = await response.json();
+
+            if (!Array.isArray(data) || data.length === 0) {
+                console.warn("Keine aktuellen Tracking-Daten verfügbar.");
+                return;
+            }
+
+            console.log("Erhaltene User-Interaktionsdaten für CSV:", data);
+
+            let csvContent = "TaskType,StartTime,EndTime,Attempts,SolvedCorrectly\n";
+            data.forEach((interaction) => {
+                csvContent += `${interaction.taskType},${interaction.startTime},${interaction.endTime},${interaction.attemptCount},${interaction.solvedCorrectly}\n`;
+            });
+
+            console.log("Generierte CSV-Daten:", csvContent); // Debugging
+
+            const blob = new Blob([csvContent], { type: "text/csv" });
+            const url = URL.createObjectURL(blob);
+
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "user_interactions.csv";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        } catch (error) {
+            console.error("Fehler beim Abrufen oder Erstellen der CSV-Datei:", error);
+        }
+    };
+
+    useEffect(() => {
+        fetchUserInteractions();
+    }, []);
+
     return (
         <div className="container">
             <header>
@@ -261,6 +342,9 @@ const TaskViewer = ({
                         {isLoading ? "Lädt..." : "Nächste Aufgabe"}
                     </button>
                 )}
+                <button onClick={downloadCSV} className="download-button">
+                    CSV herunterladen
+                </button>
                 {feedbackMessage && <p className="feedback">{feedbackMessage}</p>}
             </div>
 

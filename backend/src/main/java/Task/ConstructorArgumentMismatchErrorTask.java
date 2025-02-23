@@ -1,7 +1,6 @@
 package Task;
 
 import Context.ContextStrategy;
-
 import java.util.Random;
 
 /**

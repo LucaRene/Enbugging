@@ -20,7 +20,7 @@ public class TrackingService {
     private final int DEFAULT_SCORE = 5;
     private final List<UserInteraction> userInteractions;
     private final HashMap<String, Integer> taskPerformance;
-    private final String csvFilePath;
+    //private final String csvFilePath;
 
     /**
      * Constructor initializes tracking data structures.
@@ -28,9 +28,9 @@ public class TrackingService {
     public TrackingService(List<String> taskTypes) {
         this.userInteractions = new ArrayList<>();
         this.taskPerformance = new HashMap<>();
-        this.csvFilePath = Paths.get(System.getProperty("user.dir"), "user_interactions.csv").toString();
+        //this.csvFilePath = Paths.get(System.getProperty("user.dir"), "user_interactions.csv").toString();
         TaskTypeProvider taskTypeProvider = new TaskTypeProvider();
-        initializeCSV();
+        //initializeCSV();
         initializeTaskPerformance(taskTypeProvider.getTaskTypes());
     }
 
@@ -46,13 +46,15 @@ public class TrackingService {
     /**
      * Initializes the CSV file with headers.
      */
-    private void initializeCSV() {
+    /** private void initializeCSV() {
         try (FileWriter writer = new FileWriter(csvFilePath)) {
             writer.write("TaskType,StartTime,EndTime,Attempts,SolvedCorrectly\n");
         } catch (IOException e) {
             System.err.println("Failed to initialize CSV file: " + e.getMessage());
         }
     }
+    */
+
 
     /**
      * Records a user interaction.
@@ -61,12 +63,13 @@ public class TrackingService {
      */
     public void recordInteraction(UserInteraction interaction) {
         userInteractions.add(interaction);
-        rewriteCSV();
+        //rewriteCSV();
     }
 
     /**
      * Rewrites the entire CSV file with the current list of user interactions.
      */
+    /**
     public void rewriteCSV() {
         try (FileWriter writer = new FileWriter(csvFilePath)) {
             writer.write("TaskType,StartTime,EndTime,Attempts,SolvedCorrectly\n");
@@ -78,12 +81,15 @@ public class TrackingService {
         }
     }
 
+    */
+
     /**
      * Formats a user interaction as a CSV row.
      *
      * @param interaction The user interaction to format.
      * @return The formatted CSV row.
      */
+    /**
     private String formatInteraction(UserInteraction interaction) {
         return String.format("%s,%s,%s,%d,%b\n",
                 interaction.getTaskType(),
@@ -92,6 +98,7 @@ public class TrackingService {
                 interaction.getAttemptCount(),
                 interaction.isSolvedCorrectly());
     }
+    */
 
 
     /**

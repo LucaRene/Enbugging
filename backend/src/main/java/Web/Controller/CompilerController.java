@@ -74,7 +74,7 @@ public class CompilerController {
             }
         }
 
-        trackingService.rewriteCSV();
+        //trackingService.rewriteCSV();
 
         return ResponseEntity.ok(Map.of(
                 "status", isCorrect ? "success" : "error",
