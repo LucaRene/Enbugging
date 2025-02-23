@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -41,13 +42,14 @@ public class CompilerController {
         String code = request.getCode();
         String expectedError = request.getExpectedError();
 
-        if (code == null || code.isBlank()) {
-            return ResponseEntity.badRequest().body(Map.of(
-                    "status", "error",
-                    "message", "Code must be provided.",
-                    "actualError", "",
-                    "evaluation", "Incorrect"
-            ));
+        if (code == null) {
+            Map<String, String> response = new HashMap<>();
+            response.put("status", "error");
+            response.put("message", "Code must be provided.");
+            response.put("actualError", "");
+            response.put("evaluation", "Incorrect");
+
+            return ResponseEntity.badRequest().body(response);
         }
 
 
@@ -76,13 +78,15 @@ public class CompilerController {
 
         //trackingService.rewriteCSV();
 
-        return ResponseEntity.ok(Map.of(
-                "status", isCorrect ? "success" : "error",
-                "expectedError", expectedError,
-                "actualError", actualError,
-                "evaluation", isCorrect ? "Richtig! ✅ Gut gelöst! \n Gehe weiter zur nächsten Aufgabe!"
-                        : "Leider falsch! ❌ \n Versuche es gleich nochmal!"
-        ));
+        Map<String, String> response = new HashMap<>();
+        response.put("status", isCorrect ? "success" : "error");
+        response.put("expectedError", expectedError);
+        response.put("actualError", actualError);
+        response.put("evaluation", isCorrect
+                ? "Richtig! ✅ Gut gelöst! \n Gehe weiter zur nächsten Aufgabe!"
+                : "Leider falsch! ❌ \n Versuche es gleich nochmal!");
+
+        return ResponseEntity.ok(response);
     }
 
     /**

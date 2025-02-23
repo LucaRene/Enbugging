@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 /**
  * The Task class generates a random, syntactically correct Java class code snippet.
@@ -368,10 +369,12 @@ public abstract class Task {
         logger.info("Creating gaps in the code...");
         Random random = new Random();
         StringBuilder code = new StringBuilder(taskCodeWithoutGaps);
-        List<String> words = new ArrayList<>(Arrays.stream(code.toString()
+
+       List<String> words = new ArrayList<>(Arrays.stream(code.toString()
                         .split("(?<=;)|(?=;)|(?<=\\()|(?=\\()|(?<=\\))|(?=\\))|(?<=\\{)|(?=\\{)|(?<=\\})|(?=\\})|\\s+"))
-                .filter(word -> !word.isEmpty())
-                .toList());
+                .map(String::trim) // Trim whitespace for each word
+                .filter(word -> !word.isEmpty()) // Remove empty entries
+                .collect(Collectors.toList())); // Collect results into a list
 
         if (!createSolutionGap(code, random)) {
             logger.warning("Solution gap could not be created.");
@@ -382,7 +385,7 @@ public abstract class Task {
             int index = random.nextInt(words.size());
             String gap = words.get(index);
 
-            while (gap.isEmpty() || gap.isBlank()) {
+            while (gap.trim().isEmpty()) {
                 index = random.nextInt(words.size());
                 gap = words.get(index);
             }
@@ -410,7 +413,7 @@ public abstract class Task {
                 continue;
             }
 
-            code.replace(position, position + gap.length(), "[[" + gap + "]]");
+            code.replace(position, position + gap.length(), "[[" + gap.trim() + "]]");
             words.remove(index);
         }
 
