@@ -6,6 +6,9 @@ import Task.TaskTypeProvider;
 import Web.Tracking.TrackingService;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.*;
 
 /**
@@ -16,6 +19,7 @@ public class TaskService {
 
     final TrackingService trackingService;
     final TaskTypeProvider taskTypeProvider;
+    final List<String> predefinedTaskTypes;
 
     /**
      * Constructor to initialize the task service.
@@ -25,6 +29,23 @@ public class TaskService {
     public TaskService(TrackingService trackingService) {
         this.trackingService = trackingService;
         taskTypeProvider = new TaskTypeProvider();
+        predefinedTaskTypes = loadPredefinedTasks();
+    }
+
+    private List<String> loadPredefinedTasks() {
+        File file = new File("config.txt");
+        if (!file.exists()) return Collections.emptyList();
+
+        try {
+            return Files.readAllLines(file.toPath())
+                    .stream()
+                    .map(String::trim)
+                    .filter(line -> !line.isEmpty())
+                    .toList();
+        } catch (IOException e) {
+            System.err.println("Could not read config.txt: " + e.getMessage());
+            return Collections.emptyList();
+        }
     }
 
     /**
@@ -37,26 +58,30 @@ public class TaskService {
         System.out.println("Category: " + category);
 
         List<String> weightedTaskTypes;
-        switch (category) {
-            case "type":
-                System.out.println("Type");
-                weightedTaskTypes = new ArrayList<>(taskTypeProvider.getTypeErrorTasks());
-                break;
-            case "syntax":
-                System.out.println("Syntax");
-                weightedTaskTypes = new ArrayList<>(taskTypeProvider.getSyntaxErrorTasks());
-                break;
-            case "declaration":
-                System.out.println("Declaration");
-                weightedTaskTypes = new ArrayList<>(taskTypeProvider.getDeclarationErrorTasks());
-                break;
-            case "full":
-                System.out.println("Full");
-                weightedTaskTypes = new ArrayList<>(taskTypeProvider.getAllTaskTypes());
-                break;
-            default:
-                System.out.println("Default");
-                weightedTaskTypes = new ArrayList<>(taskTypeProvider.getAllTaskTypes());
+        if (!predefinedTaskTypes.isEmpty()) {
+            weightedTaskTypes = new ArrayList<>(predefinedTaskTypes);
+        } else {
+            switch (category) {
+                case "type":
+                    System.out.println("Type");
+                    weightedTaskTypes = new ArrayList<>(taskTypeProvider.getTypeErrorTasks());
+                    break;
+                case "syntax":
+                    System.out.println("Syntax");
+                    weightedTaskTypes = new ArrayList<>(taskTypeProvider.getSyntaxErrorTasks());
+                    break;
+                case "declaration":
+                    System.out.println("Declaration");
+                    weightedTaskTypes = new ArrayList<>(taskTypeProvider.getDeclarationErrorTasks());
+                    break;
+                case "full":
+                    System.out.println("Full");
+                    weightedTaskTypes = new ArrayList<>(taskTypeProvider.getAllTaskTypes());
+                    break;
+                default:
+                    System.out.println("Default");
+                    weightedTaskTypes = new ArrayList<>(taskTypeProvider.getAllTaskTypes());
+            }
         }
 
         trackingService.getTaskPerformance().forEach((taskType, weight) -> {
@@ -82,4 +107,7 @@ public class TaskService {
         return TaskFactory.createTask(selectedTaskType, gapCount);
     }
 
+    public boolean hasPredefinedTasks() {
+        return !predefinedTaskTypes.isEmpty();
+    }
 }

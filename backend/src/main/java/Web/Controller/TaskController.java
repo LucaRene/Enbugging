@@ -22,6 +22,11 @@ public class TaskController {
         this.trackingService = trackingService;
     }
 
+    @GetMapping("/config-used")
+    public boolean isConfigUsed() {
+        return taskService.hasPredefinedTasks();
+    }
+
     @GetMapping("/task")
     public Task getTask(@RequestParam("type") String type) {
         Task t = taskService.generateRandomTask(type);

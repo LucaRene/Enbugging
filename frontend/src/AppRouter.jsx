@@ -35,10 +35,15 @@ function AppRouter() {
     };
 
     useEffect(() => {
-        if (location.pathname === "/task") {
-            fetchNewTask();
-        }
-    }, [location.pathname]);
+        fetch('http://localhost:8080/config-used')
+            .then(res => res.json())
+            .then(configUsed => {
+                if (configUsed) {
+                    setSelectedCategory('full');
+                    navigate('/task');
+                }
+            });
+    }, []);
 
     return (
         <Routes>
