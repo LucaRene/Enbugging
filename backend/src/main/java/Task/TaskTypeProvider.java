@@ -15,7 +15,7 @@ public class TaskTypeProvider {
      *
      * @return List of task types.
      */
-    public List<String> getTaskTypes() {
+    public List<String> getAllTaskTypes() {
         return List.of(
                 "SemicolonErrorTask",
                 "UnclosedStringErrorTask",
@@ -30,6 +30,34 @@ public class TaskTypeProvider {
                 "MissingReturnValueErrorTask",
                 "MissingReturnStatementErrorTask",
                 "ConstructorArgumentMismatchErrorTask"
+        );
+    }
+
+    public List<String> getTypeErrorTasks(){
+        return List.of(
+                "IntConvertToStringErrorTask",
+                "StringConvertToIntOrDoubleErrorTask",
+                "ConstructorArgumentMismatchErrorTask"
+        );
+    }
+
+    public List<String> getSyntaxErrorTasks(){
+        return List.of(
+                "SemicolonErrorTask",
+                "UnclosedStringErrorTask",
+                "ReachedEndOfFileErrorTask",
+                "IllegalStartOfExpressionErrorTask"
+        );
+    }
+
+    public List<String> getDeclarationErrorTasks(){
+        return List.of(
+                "VariableAlreadyDefinedErrorTask",
+                "IdentifierExpectedErrorTask",
+                "CannotFindSymbolErrorTask",
+                "InvalidMethodDeclarationErrorTask",
+                "MissingReturnValueErrorTask",
+                "MissingReturnStatementErrorTask"
         );
     }
 }

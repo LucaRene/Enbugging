@@ -32,28 +32,52 @@ public class TaskService {
      *
      * @return A randomly generated task
      */
-    public Task generateRandomTask() {
+    public Task generateRandomTask(String category) {
         Random random = new Random();
+        System.out.println("Category: " + category);
 
-        List<String> weightedTaskTypes = new ArrayList<>(taskTypeProvider.getTaskTypes());
-        for (HashMap.Entry<String, Integer> entry : trackingService.getTaskPerformance().entrySet()) {
-            String taskType = entry.getKey();
-            int weight = entry.getValue();
-            for (int i = 1; i < weight; i++) {
-                weightedTaskTypes.add(taskType);
-            }
+        List<String> weightedTaskTypes;
+        switch (category) {
+            case "type":
+                System.out.println("Type");
+                weightedTaskTypes = new ArrayList<>(taskTypeProvider.getTypeErrorTasks());
+                break;
+            case "syntax":
+                System.out.println("Syntax");
+                weightedTaskTypes = new ArrayList<>(taskTypeProvider.getSyntaxErrorTasks());
+                break;
+            case "declaration":
+                System.out.println("Declaration");
+                weightedTaskTypes = new ArrayList<>(taskTypeProvider.getDeclarationErrorTasks());
+                break;
+            case "full":
+                System.out.println("Full");
+                weightedTaskTypes = new ArrayList<>(taskTypeProvider.getAllTaskTypes());
+                break;
+            default:
+                System.out.println("Default");
+                weightedTaskTypes = new ArrayList<>(taskTypeProvider.getAllTaskTypes());
         }
 
-        int averageScore = taskTypeProvider.getTaskTypes().size() * trackingService.getDEFAULT_SCORE();
+        trackingService.getTaskPerformance().forEach((taskType, weight) -> {
+            if (weightedTaskTypes.contains(taskType)) {
+                for (int i = 1; i < weight; i++) {
+                    weightedTaskTypes.add(taskType);
+                }
+            }
+        });
+
+        int averageScore = taskTypeProvider.getAllTaskTypes().size() * trackingService.getDEFAULT_SCORE();
         int actualScore = weightedTaskTypes.size();
         int gapCount = random.nextInt(3) + 5;
 
-        if (actualScore < averageScore-10) {
+        if (actualScore < averageScore - 10) {
             gapCount = random.nextInt(4) + 6;
-        } else if (actualScore > averageScore+10) {
+        } else if (actualScore > averageScore + 10) {
             gapCount = random.nextInt(2) + 3;
         }
 
+        System.out.println("Weighted Task Types: " + weightedTaskTypes);
         String selectedTaskType = weightedTaskTypes.get(random.nextInt(weightedTaskTypes.size()));
         return TaskFactory.createTask(selectedTaskType, gapCount);
     }
