@@ -31,7 +31,7 @@ public class TrackingService {
         this.csvFilePath = Paths.get(System.getProperty("user.dir"), "user_interactions.csv").toString();
         TaskTypeProvider taskTypeProvider = new TaskTypeProvider();
         initializeCSV();
-        initializeTaskPerformance(taskTypeProvider.getTaskTypes());
+        initializeTaskPerformance(taskTypeProvider.getAllTaskTypes());
     }
 
     /**

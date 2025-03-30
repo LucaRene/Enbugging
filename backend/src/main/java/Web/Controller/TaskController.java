@@ -5,6 +5,7 @@ import Web.Service.TaskService;
 import Web.Tracking.TrackingService;
 import Web.Tracking.UserInteraction;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -22,8 +23,8 @@ public class TaskController {
     }
 
     @GetMapping("/task")
-    public Task getTask() {
-        Task t = taskService.generateRandomTask();
+    public Task getTask(@RequestParam("type") String type) {
+        Task t = taskService.generateRandomTask(type);
         UserInteraction interaction = new UserInteraction(t.getTaskType());
         trackingService.recordInteraction(interaction);
         return t;
